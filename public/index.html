@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>HITAM | 3D Student Portal</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- 3D BACKGROUND -->
+  <div class="scene">
+
+    <div class="cube cube-one"></div>
+    <div class="cube cube-two"></div>
+    <div class="cube cube-three"></div>
+
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+
+    <div class="grid-floor"></div>
+
+  </div>
+
+
+  <!-- ================= STUDENT LOGIN ================= -->
+
+  <section id="loginPage" class="page active">
+
+    <div class="login-box glass">
+
+      <div class="logo-3d">
+        HITAM
+      </div>
+
+      <div class="badge">
+        3D STUDENT PORTAL
+      </div>
+
+      <h1>Welcome</h1>
+
+      <p class="subtext">
+        Sign in to your HITAM account
+      </p>
+
+      <input
+        id="username"
+        type="text"
+        placeholder="Username"
+        autocomplete="username"
+      >
+
+      <input
+        id="password"
+        type="password"
+        placeholder="Password"
+        autocomplete="current-password"
+      >
+
+      <button onclick="studentLogin()">
+        LOGIN
+      </button>
+
+      <button
+        class="secondary-button"
+        onclick="showLeaderLogin()"
+      >
+        LEADERS PANEL
+      </button>
+
+      <button
+        class="text-button"
+        onclick="showForgotPassword()"
+      >
+        Forgot Password?
+      </button>
+
+      <p id="loginMessage" class="message"></p>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= LEADER LOGIN ================= -->
+
+  <section id="leaderLoginPage" class="page">
+
+    <div class="login-box glass">
+
+      <div class="leader-icon">
+        👑
+      </div>
+
+      <div class="badge">
+        AUTHORIZED LEADERS
+      </div>
+
+      <h1>Leaders Panel</h1>
+
+      <p class="subtext">
+        Restricted HITAM access
+      </p>
+
+      <input
+        id="leaderUsername"
+        type="text"
+        placeholder="Leader username"
+      >
+
+      <input
+        id="leaderPassword"
+        type="password"
+        placeholder="Leader password"
+      >
+
+      <button onclick="leaderLogin()">
+        LEADER LOGIN
+      </button>
+
+      <button
+        class="secondary-button"
+        onclick="showStudentLogin()"
+      >
+        BACK
+      </button>
+
+      <p id="leaderMessage" class="message"></p>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= FORGOT PASSWORD ================= -->
+
+  <section id="forgotPage" class="page">
+
+    <div class="login-box glass">
+
+      <div class="logo-small">
+        🔐
+      </div>
+
+      <h1>Reset Password</h1>
+
+      <p class="subtext">
+        Verify your HITAM account
+      </p>
+
+      <input
+        id="forgotUsername"
+        type="text"
+        placeholder="Username"
+      >
+
+      <input
+        id="forgotMobile"
+        type="tel"
+        placeholder="Registered mobile number"
+      >
+
+      <button onclick="requestPasswordReset()">
+        VERIFY ACCOUNT
+      </button>
+
+      <button
+        class="secondary-button"
+        onclick="showStudentLogin()"
+      >
+        BACK TO LOGIN
+      </button>
+
+      <p id="forgotMessage" class="message"></p>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= STUDENT DASHBOARD ================= -->
+
+  <section id="studentDashboard" class="dashboard page">
+
+    <header class="topbar glass">
+
+      <div class="brand">
+        <strong>HITAM</strong>
+        <span>Student Portal</span>
+      </div>
+
+      <button
+        class="logout-button"
+        onclick="logout()"
+      >
+        Logout
+      </button>
+
+    </header>
+
+
+    <main>
+
+      <div class="hero-card glass">
+
+        <div>
+
+          <span class="small-label">
+            STUDENT DASHBOARD
+          </span>
+
+          <h1>
+            Hello,
+            <span id="studentName">
+              Student
+            </span>
+          </h1>
+
+          <p>
+            Your HITAM college portal.
+          </p>
+
+        </div>
+
+        <div class="floating-logo">
+          HITAM
+        </div>
+
+      </div>
+
+
+      <div class="dashboard-grid">
+
+        <div class="feature-card glass">
+          <span class="feature-icon">📚</span>
+          <h2>Assignments</h2>
+          <p>Manage your assignments.</p>
+        </div>
+
+        <div class="feature-card glass">
+          <span class="feature-icon">📋</span>
+          <h2>Records</h2>
+          <p>Manage your college records.</p>
+        </div>
+
+        <div class="feature-card glass">
+          <span class="feature-icon">📁</span>
+          <h2>Files</h2>
+          <p>Manage your documents and photos.</p>
+        </div>
+
+        <div class="feature-card glass">
+          <span class="feature-icon">💬</span>
+          <h2>Chat</h2>
+          <p>Communicate with your class.</p>
+        </div>
+
+        <div class="feature-card glass">
+          <span class="feature-icon">🕒</span>
+          <h2>Timetable</h2>
+          <p>View your class timetable.</p>
+        </div>
+
+
+        <!-- LOCATION -->
+
+        <div class="feature-card glass location-card">
+
+          <span class="feature-icon">📍</span>
+
+          <h2>My Location</h2>
+
+          <p id="locationStatus">
+            Location sharing is OFF.
+          </p>
+
+          <input
+            id="mobileNumber"
+            type="tel"
+            placeholder="Registered mobile number"
+          >
+
+          <button onclick="enableLocation()">
+            ENABLE LOCATION
+          </button>
+
+          <button
+            class="stop-location"
+            onclick="stopLocation()"
+          >
+            STOP SHARING
+          </button>
+
+        </div>
+
+
+        <!-- SETTINGS -->
+
+        <div
+          class="feature-card glass"
+          onclick="openSettings()"
+        >
+
+          <span class="feature-icon">⚙️</span>
+
+          <h2>Settings</h2>
+
+          <p>
+            Change your password and account settings.
+          </p>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </section>
+
+
+  <!-- ================= SETTINGS ================= -->
+
+  <section id="settingsPage" class="dashboard page">
+
+    <header class="topbar glass">
+
+      <div class="brand">
+        <strong>HITAM</strong>
+        <span>Account Settings</span>
+      </div>
+
+      <button
+        class="logout-button"
+        onclick="backToDashboard()"
+      >
+        BACK
+      </button>
+
+    </header>
+
+
+    <main>
+
+      <div class="settings-card glass">
+
+        <span class="small-label">
+          ACCOUNT
+        </span>
+
+        <h1>Settings</h1>
+
+        <div class="account-info">
+
+          <p>
+            Username:
+            <strong id="settingsUsername">-</strong>
+          </p>
+
+          <p>
+            Mobile:
+            <strong id="settingsMobile">
+              Not registered
+            </strong>
+          </p>
+
+        </div>
+
+
+        <h2>Change Password</h2>
+
+        <input
+          id="oldPassword"
+          type="password"
+          placeholder="Current password"
+        >
+
+        <input
+          id="newPassword"
+          type="password"
+          placeholder="New password"
+        >
+
+        <input
+          id="confirmPassword"
+          type="password"
+          placeholder="Confirm new password"
+        >
+
+        <button onclick="changePassword()">
+          CHANGE PASSWORD
+        </button>
+
+        <p
+          id="settingsMessage"
+          class="message"
+        ></p>
+
+      </div>
+
+    </main>
+
+  </section>
+
+
+  <!-- ================= LEADERS DASHBOARD ================= -->
+
+  <section
+    id="leadersDashboard"
+    class="dashboard page"
+  >
+
+    <header class="topbar glass">
+
+      <div class="brand">
+        <strong>HITAM</strong>
+        <span>Leaders Panel</span>
+      </div>
+
+      <button
+        class="logout-button"
+        onclick="logout()"
+      >
+        Logout
+      </button>
+
+    </header>
+
+
+    <main>
+
+      <div class="hero-card glass">
+
+        <div>
+
+          <span class="small-label">
+            AUTHORIZED ACCESS
+          </span>
+
+          <h1>
+            Student Location Center
+          </h1>
+
+          <p>
+            Leaders can view locations shared
+            by students.
+          </p>
+
+        </div>
+
+        <div class="leader-icon big">
+          👑
+        </div>
+
+      </div>
+
+
+      <div class="tracker-card glass">
+
+        <h2>Find Student</h2>
+
+        <p class="subtext">
+          Search using the registered mobile number.
+        </p>
+
+        <div class="search-area">
+
+          <input
+            id="searchMobile"
+            type="tel"
+            placeholder="Student mobile number"
+          >
+
+          <button onclick="findStudent()">
+            TRACK STUDENT
+          </button>
+
+        </div>
+
+
+        <div
+          id="trackingResult"
+          class="tracking-result"
+        >
+          No student selected.
+        </div>
+
+
+        <div class="map-placeholder">
+
+          <div class="map-icon">
+            🗺️
+          </div>
+
+          <h3>
+            Real Student Map
+          </h3>
+
+          <p>
+            The real map and secure location
+            database will be connected next.
+          </p>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </section>
+
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>
