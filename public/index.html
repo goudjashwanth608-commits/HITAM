@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>HITAM | 3D Student Portal</title>
+  <title>HITAM | Student Portal</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- 3D BACKGROUND -->
+  <!-- ================= 3D WORLD ================= -->
+
   <div class="scene">
+
+    <div class="grid-floor"></div>
 
     <div class="cube cube-one"></div>
     <div class="cube cube-two"></div>
@@ -22,12 +24,12 @@
     <div class="orb orb-one"></div>
     <div class="orb orb-two"></div>
 
-    <div class="grid-floor"></div>
-
   </div>
 
 
-  <!-- ================= STUDENT LOGIN ================= -->
+  <!-- ================================================= -->
+  <!--                    STUDENT LOGIN                  -->
+  <!-- ================================================= -->
 
   <section id="loginPage" class="page active">
 
@@ -38,14 +40,15 @@
       </div>
 
       <div class="badge">
-        3D STUDENT PORTAL
+        STUDENT PORTAL
       </div>
 
       <h1>Welcome</h1>
 
       <p class="subtext">
-        Sign in to your HITAM account
+        Enter your HITAM account
       </p>
+
 
       <input
         id="username"
@@ -54,6 +57,14 @@
         autocomplete="username"
       >
 
+
+      <input
+        id="mobileNumber"
+        type="tel"
+        placeholder="Mobile number"
+      >
+
+
       <input
         id="password"
         type="password"
@@ -61,16 +72,19 @@
         autocomplete="current-password"
       >
 
+
       <button onclick="studentLogin()">
-        LOGIN
+        ENTER HITAM
       </button>
+
 
       <button
         class="secondary-button"
         onclick="showLeaderLogin()"
       >
-        LEADERS PANEL
+        👑 LEADERS PANEL
       </button>
+
 
       <button
         class="text-button"
@@ -79,32 +93,40 @@
         Forgot Password?
       </button>
 
-      <p id="loginMessage" class="message"></p>
+
+      <p
+        id="loginMessage"
+        class="message"
+      ></p>
 
     </div>
 
   </section>
 
 
-  <!-- ================= LEADER LOGIN ================= -->
+
+  <!-- ================================================= -->
+  <!--                   LEADER LOGIN                    -->
+  <!-- ================================================= -->
 
   <section id="leaderLoginPage" class="page">
 
-    <div class="login-box glass">
+    <div class="login-box glass leader-login">
 
       <div class="leader-icon">
         👑
       </div>
 
       <div class="badge">
-        AUTHORIZED LEADERS
+        AUTHORIZED ACCESS
       </div>
 
       <h1>Leaders Panel</h1>
 
       <p class="subtext">
-        Restricted HITAM access
+        Restricted to authorized HITAM leaders
       </p>
+
 
       <input
         id="leaderUsername"
@@ -112,31 +134,41 @@
         placeholder="Leader username"
       >
 
+
       <input
         id="leaderPassword"
         type="password"
         placeholder="Leader password"
       >
 
+
       <button onclick="leaderLogin()">
-        LEADER LOGIN
+        🔐 LEADER LOGIN
       </button>
+
 
       <button
         class="secondary-button"
         onclick="showStudentLogin()"
       >
-        BACK
+        BACK TO STUDENT LOGIN
       </button>
 
-      <p id="leaderMessage" class="message"></p>
+
+      <p
+        id="leaderMessage"
+        class="message"
+      ></p>
 
     </div>
 
   </section>
 
 
-  <!-- ================= FORGOT PASSWORD ================= -->
+
+  <!-- ================================================= -->
+  <!--                 FORGOT PASSWORD                   -->
+  <!-- ================================================= -->
 
   <section id="forgotPage" class="page">
 
@@ -146,11 +178,16 @@
         🔐
       </div>
 
+      <div class="badge">
+        ACCOUNT SECURITY
+      </div>
+
       <h1>Reset Password</h1>
 
       <p class="subtext">
         Verify your HITAM account
       </p>
+
 
       <input
         id="forgotUsername"
@@ -158,15 +195,18 @@
         placeholder="Username"
       >
 
+
       <input
         id="forgotMobile"
         type="tel"
         placeholder="Registered mobile number"
       >
 
+
       <button onclick="requestPasswordReset()">
         VERIFY ACCOUNT
       </button>
+
 
       <button
         class="secondary-button"
@@ -175,23 +215,50 @@
         BACK TO LOGIN
       </button>
 
-      <p id="forgotMessage" class="message"></p>
+
+      <p
+        id="forgotMessage"
+        class="message"
+      ></p>
 
     </div>
 
   </section>
 
 
-  <!-- ================= STUDENT DASHBOARD ================= -->
 
-  <section id="studentDashboard" class="dashboard page">
+  <!-- ================================================= -->
+  <!--                 STUDENT DASHBOARD                 -->
+  <!-- ================================================= -->
+
+  <section
+    id="studentDashboard"
+    class="dashboard page"
+  >
+
+    <!-- 3D NAVIGATION -->
 
     <header class="topbar glass">
 
       <div class="brand">
+
         <strong>HITAM</strong>
-        <span>Student Portal</span>
+
+        <span>
+          Student Portal
+        </span>
+
       </div>
+
+
+      <div class="online-status">
+
+        <span class="status-dot"></span>
+
+        ONLINE
+
+      </div>
+
 
       <button
         class="logout-button"
@@ -203,28 +270,34 @@
     </header>
 
 
+
     <main>
+
+      <!-- 3D HERO -->
 
       <div class="hero-card glass">
 
-        <div>
+        <div class="hero-content">
 
           <span class="small-label">
-            STUDENT DASHBOARD
+            HITAM STUDENT SPACE
           </span>
 
+
           <h1>
-            Hello,
+            Welcome,
             <span id="studentName">
               Student
             </span>
           </h1>
 
+
           <p>
-            Your HITAM college portal.
+            Your college workspace in one place.
           </p>
 
         </div>
+
 
         <div class="floating-logo">
           HITAM
@@ -233,69 +306,165 @@
       </div>
 
 
+
+      <!-- DASHBOARD CARDS -->
+
       <div class="dashboard-grid">
 
-        <div class="feature-card glass">
-          <span class="feature-icon">📚</span>
-          <h2>Assignments</h2>
-          <p>Manage your assignments.</p>
-        </div>
 
-        <div class="feature-card glass">
-          <span class="feature-icon">📋</span>
-          <h2>Records</h2>
-          <p>Manage your college records.</p>
-        </div>
+        <!-- ASSIGNMENTS -->
 
-        <div class="feature-card glass">
-          <span class="feature-icon">📁</span>
-          <h2>Files</h2>
-          <p>Manage your documents and photos.</p>
-        </div>
+        <div
+          class="feature-card glass"
+          onclick="openAssignments()"
+        >
 
-        <div class="feature-card glass">
-          <span class="feature-icon">💬</span>
-          <h2>Chat</h2>
-          <p>Communicate with your class.</p>
-        </div>
+          <div class="card-3d-icon">
+            📚
+          </div>
 
-        <div class="feature-card glass">
-          <span class="feature-icon">🕒</span>
-          <h2>Timetable</h2>
-          <p>View your class timetable.</p>
-        </div>
+          <span class="card-number">
+            01
+          </span>
 
+          <h2>
+            Assignments
+          </h2>
 
-        <!-- LOCATION -->
-
-        <div class="feature-card glass location-card">
-
-          <span class="feature-icon">📍</span>
-
-          <h2>My Location</h2>
-
-          <p id="locationStatus">
-            Location sharing is OFF.
+          <p>
+            Add, view and manage your assignments.
           </p>
 
-          <input
-            id="mobileNumber"
-            type="tel"
-            placeholder="Registered mobile number"
-          >
-
-          <button onclick="enableLocation()">
-            ENABLE LOCATION
-          </button>
-
-          <button
-            class="stop-location"
-            onclick="stopLocation()"
-          >
-            STOP SHARING
-          </button>
+          <span class="open-card">
+            OPEN →
+          </span>
 
         </div>
+
+
+
+        <!-- FILES -->
+
+        <div
+          class="feature-card glass"
+          onclick="openFiles()"
+        >
+
+          <div class="card-3d-icon">
+            📁
+          </div>
+
+          <span class="card-number">
+            02
+          </span>
+
+          <h2>
+            Files
+          </h2>
+
+          <p>
+            Upload and manage your college files.
+          </p>
+
+          <span class="open-card">
+            OPEN →
+          </span>
+
+        </div>
+
+
+
+        <!-- CHAT -->
+
+        <div
+          class="feature-card glass"
+          onclick="openChat()"
+        >
+
+          <div class="card-3d-icon">
+            💬
+          </div>
+
+          <span class="card-number">
+            03
+          </span>
+
+          <h2>
+            Class Chat
+          </h2>
+
+          <p>
+            Chat with your class members.
+          </p>
+
+          <span class="open-card">
+            OPEN →
+          </span>
+
+        </div>
+
+
+
+        <!-- TIMETABLE -->
+
+        <div
+          class="feature-card glass"
+          onclick="openTimetable()"
+        >
+
+          <div class="card-3d-icon">
+            🗓️
+          </div>
+
+          <span class="card-number">
+            04
+          </span>
+
+          <h2>
+            Timetable
+          </h2>
+
+          <p>
+            View daily and monthly timetables.
+          </p>
+
+          <span class="open-card">
+            OPEN →
+          </span>
+
+        </div>
+
+
+
+        <!-- CHARTS -->
+
+        <div
+          class="feature-card glass"
+          onclick="openCharts()"
+        >
+
+          <div class="card-3d-icon">
+            📊
+          </div>
+
+          <span class="card-number">
+            05
+          </span>
+
+          <h2>
+            Charts
+          </h2>
+
+          <p>
+            View your academic dashboard.
+          </p>
+
+          <span class="open-card">
+            OPEN →
+          </span>
+
+        </div>
+
 
 
         <!-- SETTINGS -->
@@ -305,12 +474,404 @@
           onclick="openSettings()"
         >
 
-          <span class="feature-icon">⚙️</span>
+          <div class="card-3d-icon">
+            ⚙️
+          </div>
 
-          <h2>Settings</h2>
+          <span class="card-number">
+            06
+          </span>
+
+          <h2>
+            Settings
+          </h2>
 
           <p>
-            Change your password and account settings.
+            Manage your account and password.
+          </p>
+
+          <span class="open-card">
+            OPEN →
+          </span>
+
+        </div>
+
+
+      </div>
+
+    </main>
+
+  </section>
+
+
+
+  <!-- ================================================= -->
+  <!--                  ASSIGNMENTS                      -->
+  <!-- ================================================= -->
+
+  <section
+    id="assignmentsPage"
+    class="dashboard page"
+  >
+
+    <header class="topbar glass">
+
+      <div class="brand">
+        <strong>HITAM</strong>
+        <span>Assignments</span>
+      </div>
+
+      <button
+        class="logout-button"
+        onclick="backToDashboard()"
+      >
+        ← Dashboard
+      </button>
+
+    </header>
+
+
+    <main>
+
+      <div class="section-header glass">
+
+        <span class="small-label">
+          STUDENT WORKSPACE
+        </span>
+
+        <h1>
+          Assignments
+        </h1>
+
+        <p>
+          Add and manage your assignments.
+        </p>
+
+      </div>
+
+
+      <div class="workspace-grid">
+
+        <div class="action-card glass">
+
+          <div class="card-3d-icon">
+            ➕
+          </div>
+
+          <h2>
+            Add Assignment
+          </h2>
+
+          <input
+            id="assignmentTitle"
+            type="text"
+            placeholder="Assignment title"
+          >
+
+          <textarea
+            id="assignmentDetails"
+            placeholder="Assignment details"
+          ></textarea>
+
+          <button onclick="addAssignment()">
+            ADD ASSIGNMENT
+          </button>
+
+        </div>
+
+
+        <div
+          id="assignmentList"
+          class="action-card glass"
+        >
+
+          <div class="empty-state">
+
+            <div>
+              📚
+            </div>
+
+            <h2>
+              No assignments
+            </h2>
+
+            <p>
+              Add an assignment to see it here.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </section>
+
+
+
+  <!-- ================================================= -->
+  <!--                      FILES                        -->
+  <!-- ================================================= -->
+
+  <section
+    id="filesPage"
+    class="dashboard page"
+  >
+
+    <header class="topbar glass">
+
+      <div class="brand">
+        <strong>HITAM</strong>
+        <span>Files</span>
+      </div>
+
+      <button
+        class="logout-button"
+        onclick="backToDashboard()"
+      >
+        ← Dashboard
+      </button>
+
+    </header>
+
+
+    <main>
+
+      <div class="section-header glass">
+
+        <span class="small-label">
+          FILE CENTER
+        </span>
+
+        <h1>
+          My Files
+        </h1>
+
+        <p>
+          Upload and manage your college files.
+        </p>
+
+      </div>
+
+
+      <div class="upload-zone glass">
+
+        <div class="upload-icon">
+          📁
+        </div>
+
+        <h2>
+          Upload Files
+        </h2>
+
+        <p>
+          Choose documents, images or other files.
+        </p>
+
+
+        <input
+          id="fileUpload"
+          type="file"
+          multiple
+        >
+
+
+        <button onclick="uploadFiles()">
+          UPLOAD FILES
+        </button>
+
+
+        <button
+          class="secondary-button"
+          onclick="addGoogleDriveFile()"
+        >
+          ☁️ ADD FROM GOOGLE DRIVE
+        </button>
+
+
+        <div id="fileList"></div>
+
+      </div>
+
+    </main>
+
+  </section>
+
+
+
+  <!-- ================================================= -->
+  <!--                       CHAT                         -->
+  <!-- ================================================= -->
+
+  <section
+    id="chatPage"
+    class="dashboard page"
+  >
+
+    <header class="topbar glass">
+
+      <div class="brand">
+        <strong>HITAM</strong>
+        <span>Class Chat</span>
+      </div>
+
+      <button
+        class="logout-button"
+        onclick="backToDashboard()"
+      >
+        ← Dashboard
+      </button>
+
+    </header>
+
+
+    <main>
+
+      <div class="chat-container glass">
+
+        <div class="chat-header">
+
+          <div>
+
+            <span class="small-label">
+              CLASS COMMUNICATION
+            </span>
+
+            <h1>
+              Chat
+            </h1>
+
+          </div>
+
+          <span class="status-dot"></span>
+
+        </div>
+
+
+        <div
+          id="chatMessages"
+          class="chat-messages"
+        >
+
+          <!-- Empty intentionally -->
+
+        </div>
+
+
+        <div class="chat-input-area">
+
+          <input
+            id="chatInput"
+            type="text"
+            placeholder="Type a message..."
+          >
+
+          <button onclick="sendMessage()">
+            SEND
+          </button>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </section>
+
+
+
+  <!-- ================================================= -->
+  <!--                    TIMETABLE                      -->
+  <!-- ================================================= -->
+
+  <section
+    id="timetablePage"
+    class="dashboard page"
+  >
+
+    <header class="topbar glass">
+
+      <div class="brand">
+        <strong>HITAM</strong>
+        <span>Timetable</span>
+      </div>
+
+      <button
+        class="logout-button"
+        onclick="backToDashboard()"
+      >
+        ← Dashboard
+      </button>
+
+    </header>
+
+
+    <main>
+
+      <div class="section-header glass">
+
+        <span class="small-label">
+          ACADEMIC SCHEDULE
+        </span>
+
+        <h1>
+          Timetable
+        </h1>
+
+        <p>
+          View your daily and monthly timetable.
+        </p>
+
+      </div>
+
+
+      <div class="timetable-actions glass">
+
+        <button onclick="showDailyTimetable()">
+          DAILY
+        </button>
+
+        <button
+          class="secondary-button"
+          onclick="showMonthlyTimetable()"
+        >
+          MONTHLY
+        </button>
+
+
+        <input
+          id="timetableUpload"
+          type="file"
+          accept=".pdf,.jpg,.jpeg,.png"
+        >
+
+
+        <button onclick="uploadTimetable()">
+          UPLOAD TIMETABLE
+        </button>
+
+      </div>
+
+
+      <div
+        id="timetableDisplay"
+        class="timetable-display glass"
+      >
+
+        <div class="empty-state">
+
+          <div>
+            🗓️
+          </div>
+
+          <h2>
+            No timetable uploaded
+          </h2>
+
+          <p>
+            Your timetable will appear here.
           </p>
 
         </div>
@@ -322,22 +883,122 @@
   </section>
 
 
-  <!-- ================= SETTINGS ================= -->
 
-  <section id="settingsPage" class="dashboard page">
+  <!-- ================================================= -->
+  <!--                      CHARTS                       -->
+  <!-- ================================================= -->
+
+  <section
+    id="chartsPage"
+    class="dashboard page"
+  >
 
     <header class="topbar glass">
 
       <div class="brand">
         <strong>HITAM</strong>
-        <span>Account Settings</span>
+        <span>Charts</span>
       </div>
 
       <button
         class="logout-button"
         onclick="backToDashboard()"
       >
-        BACK
+        ← Dashboard
+      </button>
+
+    </header>
+
+
+    <main>
+
+      <div class="section-header glass">
+
+        <span class="small-label">
+          STUDENT ANALYTICS
+        </span>
+
+        <h1>
+          Dashboard Charts
+        </h1>
+
+        <p>
+          Your personal academic information.
+        </p>
+
+      </div>
+
+
+      <div class="charts-grid">
+
+        <div class="chart-card glass">
+
+          <h2>
+            Attendance
+          </h2>
+
+          <div class="chart-3d">
+            <div class="chart-bar bar-one"></div>
+            <div class="chart-bar bar-two"></div>
+            <div class="chart-bar bar-three"></div>
+            <div class="chart-bar bar-four"></div>
+            <div class="chart-bar bar-five"></div>
+          </div>
+
+          <p>
+            Personal attendance data
+          </p>
+
+        </div>
+
+
+        <div class="chart-card glass">
+
+          <h2>
+            Academic Progress
+          </h2>
+
+          <div class="progress-3d">
+
+            <div class="progress-fill"></div>
+
+          </div>
+
+          <p>
+            Personal progress
+          </p>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </section>
+
+
+
+  <!-- ================================================= -->
+  <!--                    SETTINGS                       -->
+  <!-- ================================================= -->
+
+  <section
+    id="settingsPage"
+    class="dashboard page"
+  >
+
+    <header class="topbar glass">
+
+      <div class="brand">
+        <strong>HITAM</strong>
+        <span>Settings</span>
+      </div>
+
+      <button
+        class="logout-button"
+        onclick="backToDashboard()"
+      >
+        ← Dashboard
       </button>
 
     </header>
@@ -348,29 +1009,37 @@
       <div class="settings-card glass">
 
         <span class="small-label">
-          ACCOUNT
+          ACCOUNT SECURITY
         </span>
 
-        <h1>Settings</h1>
+        <h1>
+          Settings
+        </h1>
+
 
         <div class="account-info">
 
           <p>
             Username:
-            <strong id="settingsUsername">-</strong>
+            <strong id="settingsUsername">
+              -
+            </strong>
           </p>
 
           <p>
             Mobile:
             <strong id="settingsMobile">
-              Not registered
+              -
             </strong>
           </p>
 
         </div>
 
 
-        <h2>Change Password</h2>
+        <h2>
+          Change Password
+        </h2>
+
 
         <input
           id="oldPassword"
@@ -378,11 +1047,13 @@
           placeholder="Current password"
         >
 
+
         <input
           id="newPassword"
           type="password"
           placeholder="New password"
         >
+
 
         <input
           id="confirmPassword"
@@ -390,9 +1061,11 @@
           placeholder="Confirm new password"
         >
 
+
         <button onclick="changePassword()">
           CHANGE PASSWORD
         </button>
+
 
         <p
           id="settingsMessage"
@@ -406,7 +1079,10 @@
   </section>
 
 
-  <!-- ================= LEADERS DASHBOARD ================= -->
+
+  <!-- ================================================= -->
+  <!--                  LEADERS PANEL                    -->
+  <!-- ================================================= -->
 
   <section
     id="leadersDashboard"
@@ -416,9 +1092,22 @@
     <header class="topbar glass">
 
       <div class="brand">
-        <strong>HITAM</strong>
-        <span>Leaders Panel</span>
+
+        <strong>
+          HITAM
+        </strong>
+
+        <span>
+          Leaders Panel
+        </span>
+
       </div>
+
+
+      <div class="leader-badge">
+        👑 LEADER
+      </div>
+
 
       <button
         class="logout-button"
@@ -432,24 +1121,28 @@
 
     <main>
 
+
       <div class="hero-card glass">
 
-        <div>
+        <div class="hero-content">
 
           <span class="small-label">
-            AUTHORIZED ACCESS
+            AUTHORIZED LEADER ACCESS
           </span>
 
+
           <h1>
-            Student Location Center
+            Location Center
           </h1>
 
+
           <p>
-            Leaders can view locations shared
-            by students.
+            Monitor students who have granted
+            location access.
           </p>
 
         </div>
+
 
         <div class="leader-icon big">
           👑
@@ -458,13 +1151,70 @@
       </div>
 
 
+
+      <!-- LEADER STATISTICS -->
+
+      <div class="leader-stats">
+
+        <div class="stat-card glass">
+
+          <span>
+            STUDENTS
+          </span>
+
+          <strong id="studentCount">
+            0
+          </strong>
+
+        </div>
+
+
+        <div class="stat-card glass">
+
+          <span>
+            LOCATION ACTIVE
+          </span>
+
+          <strong id="activeLocationCount">
+            0
+          </strong>
+
+        </div>
+
+
+        <div class="stat-card glass">
+
+          <span>
+            LEADERS
+          </span>
+
+          <strong>
+            5
+          </strong>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- LOCATION SEARCH -->
+
       <div class="tracker-card glass">
 
-        <h2>Find Student</h2>
+        <span class="small-label">
+          STUDENT LOCATION
+        </span>
+
+        <h2>
+          Find Student
+        </h2>
+
 
         <p class="subtext">
           Search using the registered mobile number.
         </p>
+
 
         <div class="search-area">
 
@@ -474,8 +1224,9 @@
             placeholder="Student mobile number"
           >
 
+
           <button onclick="findStudent()">
-            TRACK STUDENT
+            📍 TRACK STUDENT
           </button>
 
         </div>
@@ -485,23 +1236,30 @@
           id="trackingResult"
           class="tracking-result"
         >
+
           No student selected.
+
         </div>
 
 
+        <!-- REAL MAP WILL BE CONNECTED HERE -->
+
         <div class="map-placeholder">
+
+          <div class="map-grid-3d"></div>
 
           <div class="map-icon">
             🗺️
           </div>
 
           <h3>
-            Real Student Map
+            HITAM Student Map
           </h3>
 
           <p>
-            The real map and secure location
-            database will be connected next.
+            The secure real map will display
+            students who have enabled location
+            sharing.
           </p>
 
         </div>
@@ -513,8 +1271,12 @@
   </section>
 
 
+
+  <!-- ================================================= -->
+  <!--                  JAVASCRIPT                       -->
+  <!-- ================================================= -->
+
   <script src="app.js"></script>
 
 </body>
-
 </html>
