@@ -1,6 +1,5 @@
 const express = require("express");
 const path = require("path");
-require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -8,10 +7,10 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve the HITAM website
+// Serve the website
 app.use(express.static(path.join(__dirname, "public")));
 
-// Server status
+// Test API
 app.get("/api/status", (req, res) => {
   res.json({
     success: true,
@@ -20,7 +19,7 @@ app.get("/api/status", (req, res) => {
   });
 });
 
-// Main website
+// Send the main website
 app.get("*", (req, res) => {
   res.sendFile(
     path.join(__dirname, "public", "index.html")
@@ -31,5 +30,5 @@ app.listen(PORT, () => {
   console.log("================================");
   console.log("       HITAM SERVER STARTED");
   console.log("================================");
-  console.log(`Open: http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
