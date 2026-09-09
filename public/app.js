@@ -1,106 +1,115 @@
+// ======================================================
+// HITAM - 3D STUDENT PORTAL
+// Front-end navigation
+// ======================================================
+
 let currentUser = null;
-let locationWatchId = null;
 
 
-/* ================= PAGE CONTROL ================= */
+// ======================================================
+// PAGE NAVIGATION
+// ======================================================
 
 function showPage(pageId) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.remove("active");
+  });
 
-  document.querySelectorAll(".page")
-    .forEach(page => {
-      page.classList.remove("active");
-    });
+  const page = document.getElementById(pageId);
 
-  document
-    .getElementById(pageId)
-    .classList.add("active");
+  if (page) {
+    page.classList.add("active");
+    window.scrollTo(0, 0);
+  }
 }
 
+
+// ======================================================
+// LOGIN SCREENS
+// ======================================================
 
 function showStudentLogin() {
   showPage("loginPage");
 }
 
-
 function showLeaderLogin() {
   showPage("leaderLoginPage");
 }
-
 
 function showForgotPassword() {
   showPage("forgotPage");
 }
 
 
-/* ================= STUDENT LOGIN ================= */
+// ======================================================
+// TEMPORARY STUDENT LOGIN
+// ======================================================
+// Real database authentication will replace this later.
 
 function studentLogin() {
 
   const username =
-    document.getElementById("username")
-      .value.trim();
+    document.getElementById("username").value.trim();
+
+  const mobile =
+    document.getElementById("mobileNumber").value.trim();
 
   const password =
-    document.getElementById("password")
-      .value;
+    document.getElementById("password").value;
 
   const message =
     document.getElementById("loginMessage");
 
 
-  if (!username || !password) {
+  if (!username || !mobile || !password) {
 
     message.textContent =
-      "Enter your username and password.";
+      "Please enter username, mobile number and password.";
 
     return;
   }
 
 
-  /*
-    TEMPORARY UI LOGIN.
+  if (!/^[0-9+\-\s]{8,15}$/.test(mobile)) {
 
-    Real authentication will be connected
-    to the secure backend/database next.
-  */
+    message.textContent =
+      "Please enter a valid mobile number.";
+
+    return;
+  }
+
 
   currentUser = {
     username: username,
-    mobile: ""
+    mobile: mobile
   };
 
 
-  sessionStorage.setItem(
-    "hitamStudent",
+  localStorage.setItem(
+    "hitamCurrentUser",
     JSON.stringify(currentUser)
   );
 
 
-  document.getElementById(
-    "studentName"
-  ).textContent = username;
-
-
-  document.getElementById(
-    "settingsUsername"
-  ).textContent = username;
-
+  updateStudentInformation();
 
   showPage("studentDashboard");
 }
 
 
-/* ================= LEADER LOGIN ================= */
+// ======================================================
+// LEADER LOGIN
+// ======================================================
+// Temporary front-end demonstration only.
+// Real leader authentication will be moved to the server.
 
 function leaderLogin() {
 
   const username =
-    document.getElementById("leaderUsername")
-      .value.trim();
+    document.getElementById("leaderUsername").value.trim();
 
   const password =
-    document.getElementById("leaderPassword")
-      .value;
+    document.getElementById("leaderPassword").value;
 
   const message =
     document.getElementById("leaderMessage");
@@ -109,144 +118,495 @@ function leaderLogin() {
   if (!username || !password) {
 
     message.textContent =
-      "Enter your leader credentials.";
+      "Enter leader username and password.";
 
     return;
   }
 
 
-  /*
-    DEMO ONLY.
+  // Temporary password for development.
+  // This MUST NOT be used for the final production system.
 
-    Real leader authentication will be
-    moved completely to the server.
-  */
-
-  if (password === "HITAM26") {
-
-    sessionStorage.setItem(
-      "hitamLeader",
-      "true"
-    );
-
-    showPage("leadersDashboard");
-
-  } else {
+  if (password !== "HITAM26") {
 
     message.textContent =
       "Invalid leader credentials.";
-  }
-}
-
-
-/* ================= PASSWORD RESET ================= */
-
-function requestPasswordReset() {
-
-  const username =
-    document.getElementById(
-      "forgotUsername"
-    ).value.trim();
-
-  const mobile =
-    document.getElementById(
-      "forgotMobile"
-    ).value.trim();
-
-  const message =
-    document.getElementById(
-      "forgotMessage"
-    );
-
-
-  if (!username || !mobile) {
-
-    message.textContent =
-      "Enter your username and registered mobile number.";
 
     return;
   }
 
 
-  message.style.color = "#aeb8ff";
+  currentUser = {
+    username: username,
+    role: "leader"
+  };
 
-  message.textContent =
-    "Account verification will be connected securely next.";
+
+  localStorage.setItem(
+    "hitamCurrentUser",
+    JSON.stringify(currentUser)
+  );
+
+
+  showPage("leadersDashboard");
 }
 
 
-/* ================= SETTINGS ================= */
+// ======================================================
+// STUDENT INFORMATION
+// ======================================================
+
+function updateStudentInformation() {
+
+  if (!currentUser) return;
+
+
+  const name =
+    document.getElementById("studentName");
+
+  const settingsUsername =
+    document.getElementById("settingsUsername");
+
+  const settingsMobile =
+    document.getElementById("settingsMobile");
+
+
+  if (name) {
+    name.textContent =
+      currentUser.username;
+  }
+
+
+  if (settingsUsername) {
+    settingsUsername.textContent =
+      currentUser.username;
+  }
+
+
+  if (settingsMobile) {
+    settingsMobile.textContent =
+      currentUser.mobile || "-";
+  }
+}
+
+
+// ======================================================
+// DASHBOARD NAVIGATION
+// ======================================================
+
+function backToDashboard() {
+
+  if (
+    currentUser &&
+    currentUser.role === "leader"
+  ) {
+    showPage("leadersDashboard");
+  } else {
+    showPage("studentDashboard");
+  }
+}
+
+
+function openAssignments() {
+  showPage("assignmentsPage");
+}
+
+
+function openFiles() {
+  showPage("filesPage");
+}
+
+
+function openChat() {
+  showPage("chatPage");
+}
+
+
+function openTimetable() {
+  showPage("timetablePage");
+}
+
+
+function openCharts() {
+  showPage("chartsPage");
+}
+
 
 function openSettings() {
 
-  if (!currentUser) {
-
-    const saved =
-      sessionStorage.getItem(
-        "hitamStudent"
-      );
-
-    if (saved) {
-      currentUser = JSON.parse(saved);
-    }
-  }
-
-
-  if (currentUser) {
-
-    document.getElementById(
-      "settingsUsername"
-    ).textContent =
-      currentUser.username;
-
-    document.getElementById(
-      "settingsMobile"
-    ).textContent =
-      currentUser.mobile ||
-      "Not registered";
-  }
-
+  updateStudentInformation();
 
   showPage("settingsPage");
 }
 
 
-function backToDashboard() {
-  showPage("studentDashboard");
+// ======================================================
+// ASSIGNMENTS
+// ======================================================
+
+function addAssignment() {
+
+  const title =
+    document.getElementById("assignmentTitle").value.trim();
+
+  const details =
+    document.getElementById("assignmentDetails").value.trim();
+
+
+  if (!title) {
+    alert("Please enter an assignment title.");
+    return;
+  }
+
+
+  const assignment = {
+    id: Date.now(),
+    title: title,
+    details: details
+  };
+
+
+  const assignments =
+    JSON.parse(
+      localStorage.getItem("hitamAssignments") || "[]"
+    );
+
+
+  assignments.push(assignment);
+
+
+  localStorage.setItem(
+    "hitamAssignments",
+    JSON.stringify(assignments)
+  );
+
+
+  document.getElementById("assignmentTitle").value = "";
+  document.getElementById("assignmentDetails").value = "";
+
+
+  renderAssignments();
 }
 
+
+function renderAssignments() {
+
+  const container =
+    document.getElementById("assignmentList");
+
+  if (!container) return;
+
+
+  const assignments =
+    JSON.parse(
+      localStorage.getItem("hitamAssignments") || "[]"
+    );
+
+
+  if (assignments.length === 0) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+        <div>📚</div>
+        <h2>No assignments</h2>
+        <p>Add an assignment to see it here.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML =
+    assignments.map(item => `
+
+      <div class="assignment-item glass"
+           style="padding:20px;margin-bottom:15px;border-radius:18px;">
+
+        <h2>${escapeHTML(item.title)}</h2>
+
+        <p style="color:#aab2ce;margin-top:8px;">
+          ${escapeHTML(item.details || "")}
+        </p>
+
+        <button
+          onclick="deleteAssignment(${item.id})"
+        >
+          DELETE
+        </button>
+
+      </div>
+
+    `).join("");
+}
+
+
+function deleteAssignment(id) {
+
+  const assignments =
+    JSON.parse(
+      localStorage.getItem("hitamAssignments") || "[]"
+    );
+
+
+  const updated =
+    assignments.filter(item => item.id !== id);
+
+
+  localStorage.setItem(
+    "hitamAssignments",
+    JSON.stringify(updated)
+  );
+
+
+  renderAssignments();
+}
+
+
+// ======================================================
+// FILES
+// ======================================================
+
+function uploadFiles() {
+
+  const input =
+    document.getElementById("fileUpload");
+
+  const list =
+    document.getElementById("fileList");
+
+
+  if (!input || !list) return;
+
+
+  if (!input.files.length) {
+
+    alert("Please select a file first.");
+
+    return;
+  }
+
+
+  list.innerHTML = "";
+
+
+  Array.from(input.files).forEach(file => {
+
+    const item =
+      document.createElement("div");
+
+
+    item.style.padding = "15px";
+    item.style.marginTop = "10px";
+    item.style.borderRadius = "14px";
+    item.style.background =
+      "rgba(255,255,255,0.06)";
+
+
+    item.textContent =
+      `📄 ${file.name}`;
+
+
+    list.appendChild(item);
+
+  });
+
+
+  /*
+    IMPORTANT:
+
+    Browser-selected files are NOT permanently
+    uploaded by this temporary front-end code.
+
+    The final version will send files to the
+    secure backend/storage system.
+  */
+}
+
+
+function addGoogleDriveFile() {
+
+  alert(
+    "Google Drive integration will be connected in the backend stage."
+  );
+}
+
+
+// ======================================================
+// CHAT
+// ======================================================
+
+function sendMessage() {
+
+  const input =
+    document.getElementById("chatInput");
+
+  const messages =
+    document.getElementById("chatMessages");
+
+
+  if (!input || !messages) return;
+
+
+  const text =
+    input.value.trim();
+
+
+  if (!text) return;
+
+
+  const message =
+    document.createElement("div");
+
+
+  message.style.padding = "12px 16px";
+  message.style.marginBottom = "10px";
+  message.style.borderRadius = "15px";
+  message.style.background =
+    "rgba(90,105,255,0.18)";
+  message.style.textAlign = "right";
+
+
+  message.textContent = text;
+
+
+  messages.appendChild(message);
+
+
+  input.value = "";
+
+  messages.scrollTop =
+    messages.scrollHeight;
+}
+
+
+// ======================================================
+// TIMETABLE
+// ======================================================
+
+function showDailyTimetable() {
+
+  const display =
+    document.getElementById("timetableDisplay");
+
+
+  display.innerHTML = `
+
+    <div class="empty-state">
+
+      <div>🗓️</div>
+
+      <h2>Daily Timetable</h2>
+
+      <p>
+        Your daily timetable will appear here.
+      </p>
+
+    </div>
+
+  `;
+}
+
+
+function showMonthlyTimetable() {
+
+  const display =
+    document.getElementById("timetableDisplay");
+
+
+  display.innerHTML = `
+
+    <div class="empty-state">
+
+      <div>📅</div>
+
+      <h2>Monthly Timetable</h2>
+
+      <p>
+        Your monthly timetable will appear here.
+      </p>
+
+    </div>
+
+  `;
+}
+
+
+function uploadTimetable() {
+
+  const input =
+    document.getElementById("timetableUpload");
+
+
+  if (!input.files.length) {
+
+    alert("Please select a timetable file.");
+
+    return;
+  }
+
+
+  const display =
+    document.getElementById("timetableDisplay");
+
+
+  display.innerHTML = `
+
+    <div class="empty-state">
+
+      <div>✅</div>
+
+      <h2>Timetable Selected</h2>
+
+      <p>
+        ${escapeHTML(input.files[0].name)}
+      </p>
+
+      <p>
+        Permanent timetable storage will be
+        connected to the backend.
+      </p>
+
+    </div>
+
+  `;
+}
+
+
+// ======================================================
+// PASSWORD
+// ======================================================
 
 function changePassword() {
 
   const oldPassword =
-    document.getElementById(
-      "oldPassword"
-    ).value;
+    document.getElementById("oldPassword").value;
 
   const newPassword =
-    document.getElementById(
-      "newPassword"
-    ).value;
+    document.getElementById("newPassword").value;
 
   const confirmPassword =
-    document.getElementById(
-      "confirmPassword"
-    ).value;
+    document.getElementById("confirmPassword").value;
 
   const message =
-    document.getElementById(
-      "settingsMessage"
-    );
+    document.getElementById("settingsMessage");
 
 
-  if (
-    !oldPassword ||
-    !newPassword ||
-    !confirmPassword
-  ) {
+  if (!oldPassword ||
+      !newPassword ||
+      !confirmPassword) {
 
     message.textContent =
-      "Complete all password fields.";
+      "Please fill in all password fields.";
+
+    return;
+  }
+
+
+  if (newPassword.length < 8) {
+
+    message.textContent =
+      "New password must contain at least 8 characters.";
 
     return;
   }
@@ -261,191 +621,212 @@ function changePassword() {
   }
 
 
-  if (newPassword.length < 8) {
-
-    message.textContent =
-      "Password must contain at least 8 characters.";
-
-    return;
-  }
-
-
-  message.style.color =
-    "#aeb8ff";
-
   message.textContent =
-    "Secure password changing will be connected next.";
+    "Password changing will be connected to the secure server.";
+
 }
 
 
-/* ================= LOCATION ================= */
+function requestPasswordReset() {
 
-function enableLocation() {
+  const username =
+    document.getElementById("forgotUsername").value.trim();
 
   const mobile =
-    document.getElementById(
-      "mobileNumber"
-    ).value.trim();
+    document.getElementById("forgotMobile").value.trim();
 
-  const status =
-    document.getElementById(
-      "locationStatus"
-    );
+  const message =
+    document.getElementById("forgotMessage");
 
 
-  if (!mobile) {
+  if (!username || !mobile) {
 
-    status.textContent =
-      "Enter your registered mobile number.";
+    message.textContent =
+      "Enter username and registered mobile number.";
 
     return;
   }
 
 
-  if (!navigator.geolocation) {
+  message.textContent =
+    "Account verification will be connected to the secure server.";
 
-    status.textContent =
-      "Location is not supported by this browser.";
-
-    return;
-  }
-
-
-  status.textContent =
-    "Requesting location permission...";
-
-
-  locationWatchId =
-    navigator.geolocation.watchPosition(
-
-      position => {
-
-        const latitude =
-          position.coords.latitude;
-
-        const longitude =
-          position.coords.longitude;
-
-
-        status.textContent =
-          "🟢 Location sharing is ON.";
-
-
-        /*
-          Database storage will be connected
-          after authentication is completed.
-        */
-
-        console.log({
-          mobile,
-          latitude,
-          longitude,
-          time: new Date().toISOString()
-        });
-
-      },
-
-      error => {
-
-        if (error.code === 1) {
-
-          status.textContent =
-            "Location permission was denied.";
-
-        } else {
-
-          status.textContent =
-            "Unable to get your location.";
-
-        }
-
-      },
-
-      {
-        enableHighAccuracy: true,
-        maximumAge: 10000,
-        timeout: 15000
-      }
-
-    );
 }
 
 
-function stopLocation() {
-
-  if (locationWatchId !== null) {
-
-    navigator.geolocation.clearWatch(
-      locationWatchId
-    );
-
-    locationWatchId = null;
-  }
-
-
-  document.getElementById(
-    "locationStatus"
-  ).textContent =
-    "🔴 Location sharing is OFF.";
-}
-
-
-/* ================= LEADER SEARCH ================= */
+// ======================================================
+// LEADER LOCATION INTERFACE
+// ======================================================
 
 function findStudent() {
 
   const mobile =
-    document.getElementById(
-      "searchMobile"
-    ).value.trim();
+    document.getElementById("searchMobile").value.trim();
 
   const result =
-    document.getElementById(
-      "trackingResult"
-    );
+    document.getElementById("trackingResult");
 
 
   if (!mobile) {
 
     result.textContent =
-      "Enter the student's mobile number.";
+      "Enter a student's registered mobile number.";
 
     return;
   }
 
 
   result.innerHTML = `
-    Student search:
-    <strong>${escapeHTML(mobile)}</strong>
+
+    <strong>
+      Student search
+    </strong>
+
     <br><br>
-    Secure location lookup will be connected
-    to the database and real map next.
+
+    Mobile:
+    ${escapeHTML(mobile)}
+
+    <br><br>
+
+    Location service will be connected to the
+    secure server and real map in the next stage.
+
   `;
 }
 
 
-/* ================= SECURITY HELPER ================= */
-
-function escapeHTML(value) {
-
-  const element =
-    document.createElement("div");
-
-  element.textContent = value;
-
-  return element.innerHTML;
-}
-
-
-/* ================= LOGOUT ================= */
+// ======================================================
+// LOGOUT
+// ======================================================
 
 function logout() {
 
-  stopLocation();
-
   currentUser = null;
 
-  sessionStorage.clear();
+  localStorage.removeItem(
+    "hitamCurrentUser"
+  );
+
+
+  document.getElementById("username").value = "";
+  document.getElementById("mobileNumber").value = "";
+  document.getElementById("password").value = "";
 
   showStudentLogin();
 }
+
+
+// ======================================================
+// SECURITY HELPER
+// ======================================================
+
+function escapeHTML(value) {
+
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+
+// ======================================================
+// 3D CARD MOVEMENT
+// ======================================================
+
+document.addEventListener(
+  "pointermove",
+  event => {
+
+    const cards =
+      document.querySelectorAll(
+        ".feature-card"
+      );
+
+
+    cards.forEach(card => {
+
+      const rect =
+        card.getBoundingClientRect();
+
+
+      if (
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom
+      ) {
+
+        const x =
+          event.clientX - rect.left;
+
+        const y =
+          event.clientY - rect.top;
+
+
+        const rotateY =
+          ((x / rect.width) - 0.5) * 8;
+
+        const rotateX =
+          ((y / rect.height) - 0.5) * -8;
+
+
+        card.style.transform =
+          `perspective(900px)
+           rotateX(${rotateX}deg)
+           rotateY(${rotateY}deg)
+           translateY(-12px)
+           translateZ(25px)`;
+
+      } else {
+
+        card.style.transform = "";
+
+      }
+
+    });
+
+  }
+);
+
+
+// ======================================================
+// INITIALIZE
+// ======================================================
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    const savedUser =
+      localStorage.getItem(
+        "hitamCurrentUser"
+      );
+
+
+    if (savedUser) {
+
+      try {
+
+        currentUser =
+          JSON.parse(savedUser);
+
+        updateStudentInformation();
+
+      } catch {
+
+        localStorage.removeItem(
+          "hitamCurrentUser"
+        );
+
+      }
+
+    }
+
+
+    renderAssignments();
+
+  }
+);
