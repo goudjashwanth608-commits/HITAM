@@ -7,10 +7,10 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve the website
+// Serve the HITAM website
 app.use(express.static(path.join(__dirname, "public")));
 
-// Test API
+// Test server
 app.get("/api/status", (req, res) => {
   res.json({
     success: true,
@@ -19,8 +19,8 @@ app.get("/api/status", (req, res) => {
   });
 });
 
-// Send the main website
-app.get("*", (req, res) => {
+// Send index.html for other routes
+app.use((req, res) => {
   res.sendFile(
     path.join(__dirname, "public", "index.html")
   );
