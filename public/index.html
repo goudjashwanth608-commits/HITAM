@@ -1,855 +1,1646 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>HITAM | Student Portal</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-  <link rel="stylesheet" href="style.css">
+  <title>HITAM | College Portal</title>
+
+
+  <!-- ==================================================
+       LEAFLET REAL MAP
+       ================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  >
+
+
+  <!-- ==================================================
+       GOOGLE FONT
+       ================================================== -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- ==================================================
+       3D DESIGN CSS
+       ================================================== -->
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    body {
+
+      font-family: "Inter", sans-serif;
+
+      min-height: 100vh;
+
+      color: white;
+
+      background:
+        radial-gradient(
+          circle at 20% 20%,
+          rgba(87, 75, 255, 0.30),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 80% 10%,
+          rgba(0, 200, 255, 0.20),
+          transparent 30%
+        ),
+        linear-gradient(
+          135deg,
+          #050816,
+          #0a1024,
+          #10183a
+        );
+
+      overflow-x: hidden;
+    }
+
+
+    /* Moving background */
+
+    body::before {
+
+      content: "";
+
+      position: fixed;
+
+      width: 450px;
+      height: 450px;
+
+      border-radius: 50%;
+
+      background:
+        rgba(95, 80, 255, 0.10);
+
+      filter: blur(50px);
+
+      top: -150px;
+      left: -100px;
+
+      animation:
+        floatingOrb 8s ease-in-out infinite alternate;
+
+      pointer-events: none;
+    }
+
+
+    body::after {
+
+      content: "";
+
+      position: fixed;
+
+      width: 400px;
+      height: 400px;
+
+      border-radius: 50%;
+
+      background:
+        rgba(0, 210, 255, 0.08);
+
+      filter: blur(50px);
+
+      right: -150px;
+      bottom: -150px;
+
+      animation:
+        floatingOrb 10s ease-in-out infinite alternate-reverse;
+
+      pointer-events: none;
+    }
+
+
+    @keyframes floatingOrb {
+
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+
+      to {
+        transform: translate3d(80px, 50px, 0);
+      }
+
+    }
+
+
+    /* ==================================================
+       COMMON
+       ================================================== */
+
+    .page {
+
+      display: none;
+
+      min-height: 100vh;
+
+      padding: 25px;
+
+    }
+
+
+    .page.active {
+      display: block;
+    }
+
+
+    .glass {
+
+      background:
+        rgba(255,255,255,0.07);
+
+      border:
+        1px solid rgba(255,255,255,0.12);
+
+      backdrop-filter:
+        blur(20px);
+
+      -webkit-backdrop-filter:
+        blur(20px);
+
+      box-shadow:
+        0 25px 60px rgba(0,0,0,0.25);
+
+    }
+
+
+    /* ==================================================
+       LOGIN
+       ================================================== */
+
+    .login-page {
+
+      display: none;
+
+      min-height: 100vh;
+
+      align-items: center;
+
+      justify-content: center;
+
+    }
+
+
+    .login-page.active {
+
+      display: flex;
+
+    }
+
+
+    .login-card {
+
+      width: 100%;
+
+      max-width: 440px;
+
+      padding: 35px;
+
+      border-radius: 30px;
+
+      transform:
+        perspective(1000px)
+        rotateX(2deg);
+
+      transition:
+        transform 0.3s ease;
+
+    }
+
+
+    .login-card:hover {
+
+      transform:
+        perspective(1000px)
+        rotateX(0deg)
+        translateY(-8px);
+
+    }
+
+
+    .logo {
+
+      width: 85px;
+
+      height: 85px;
+
+      margin:
+        0 auto 20px;
+
+      border-radius: 25px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      font-size: 32px;
+
+      font-weight: 800;
+
+      background:
+        linear-gradient(
+          135deg,
+          #635bff,
+          #00c8ff
+        );
+
+      box-shadow:
+        0 20px 45px
+        rgba(72,90,255,0.4);
+
+      transform:
+        translateZ(30px);
+
+    }
+
+
+    h1 {
+
+      font-size: 34px;
+
+      text-align: center;
+
+      margin-bottom: 8px;
+
+    }
+
+
+    .subtitle {
+
+      text-align: center;
+
+      color: #aab2ce;
+
+      margin-bottom: 28px;
+
+    }
+
+
+    .input-group {
+
+      margin-bottom: 16px;
+
+    }
+
+
+    .input-group label {
+
+      display: block;
+
+      margin-bottom: 8px;
+
+      color: #c8cde0;
+
+      font-size: 14px;
+
+    }
+
+
+    input,
+    textarea {
+
+      width: 100%;
+
+      border: 1px solid
+        rgba(255,255,255,0.12);
+
+      outline: none;
+
+      border-radius: 15px;
+
+      padding: 14px 16px;
+
+      color: white;
+
+      background:
+        rgba(255,255,255,0.07);
+
+      font-size: 15px;
+
+    }
+
+
+    input:focus,
+    textarea:focus {
+
+      border-color:
+        rgba(100,130,255,0.8);
+
+      box-shadow:
+        0 0 20px
+        rgba(80,100,255,0.15);
+
+    }
+
+
+    button {
+
+      border: none;
+
+      cursor: pointer;
+
+      color: white;
+
+      font-weight: 700;
+
+      border-radius: 15px;
+
+      padding: 13px 18px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #625bff,
+          #00aeea
+        );
+
+      box-shadow:
+        0 12px 30px
+        rgba(70,80,255,0.25);
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+    }
+
+
+    button:hover {
+
+      transform:
+        translateY(-3px)
+        scale(1.02);
+
+      box-shadow:
+        0 18px 35px
+        rgba(70,80,255,0.35);
+
+    }
+
+
+    .primary-button {
+
+      width: 100%;
+
+      margin-top: 8px;
+
+      padding: 16px;
+
+      font-size: 16px;
+
+    }
+
+
+    .secondary-button {
+
+      background:
+        rgba(255,255,255,0.08);
+
+      box-shadow: none;
+
+    }
+
+
+    .login-links {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      gap: 10px;
+
+      margin-top: 20px;
+
+    }
+
+
+    .text-button {
+
+      background: transparent;
+
+      box-shadow: none;
+
+      padding: 5px;
+
+      color: #9eacff;
+
+    }
+
+
+    .message {
+
+      min-height: 24px;
+
+      color: #ffb4b4;
+
+      font-size: 14px;
+
+      margin-top: 12px;
+
+      text-align: center;
+
+    }
+
+
+    /* ==================================================
+       DASHBOARD HEADER
+       ================================================== */
+
+    .dashboard {
+
+      max-width: 1400px;
+
+      margin: auto;
+
+    }
+
+
+    .topbar {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 15px;
+
+      padding: 18px 22px;
+
+      border-radius: 22px;
+
+      margin-bottom: 25px;
+
+    }
+
+
+    .brand {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+    }
+
+
+    .brand-logo {
+
+      width: 50px;
+
+      height: 50px;
+
+      border-radius: 15px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      font-weight: 800;
+
+      background:
+        linear-gradient(
+          135deg,
+          #625bff,
+          #00c8ff
+        );
+
+    }
+
+
+    .brand-title {
+
+      font-size: 20px;
+
+      font-weight: 800;
+
+    }
+
+
+    .brand-subtitle {
+
+      color: #8e98b9;
+
+      font-size: 12px;
+
+    }
+
+
+    .top-actions {
+
+      display: flex;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+
+    }
+
+
+    /* ==================================================
+       HERO
+       ================================================== */
+
+    .hero {
+
+      padding: 30px;
+
+      border-radius: 28px;
+
+      margin-bottom: 25px;
+
+      transform:
+        perspective(1200px)
+        rotateX(1deg);
+
+    }
+
+
+    .hero h2 {
+
+      font-size: 32px;
+
+      margin-bottom: 8px;
+
+    }
+
+
+    .hero p {
+
+      color: #aab2ce;
+
+      line-height: 1.7;
+
+    }
+
+
+    /* ==================================================
+       FEATURE CARDS
+       ================================================== */
+
+    .feature-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(200px, 1fr)
+        );
+
+      gap: 18px;
+
+      margin-bottom: 25px;
+
+    }
+
+
+    .feature-card {
+
+      min-height: 170px;
+
+      padding: 24px;
+
+      border-radius: 25px;
+
+      position: relative;
+
+      overflow: hidden;
+
+      transform-style: preserve-3d;
+
+      transition:
+        transform 0.25s ease,
+        border 0.25s ease;
+
+    }
+
+
+    .feature-card:hover {
+
+      border-color:
+        rgba(120,140,255,0.45);
+
+    }
+
+
+    .feature-icon {
+
+      font-size: 38px;
+
+      margin-bottom: 18px;
+
+      transform:
+        translateZ(35px);
+
+    }
+
+
+    .feature-card h3 {
+
+      margin-bottom: 8px;
+
+      transform:
+        translateZ(20px);
+
+    }
+
+
+    .feature-card p {
+
+      color: #98a2c2;
+
+      font-size: 13px;
+
+      line-height: 1.5;
+
+    }
+
+
+    /* ==================================================
+       GENERAL CONTENT
+       ================================================== */
+
+    .content-card {
+
+      max-width: 1200px;
+
+      margin: auto;
+
+      padding: 25px;
+
+      border-radius: 28px;
+
+    }
+
+
+    .section-title {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 15px;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .section-title h2 {
+
+      font-size: 26px;
+
+    }
+
+
+    .empty-state {
+
+      text-align: center;
+
+      padding: 45px 20px;
+
+      color: #9da6c2;
+
+    }
+
+
+    .empty-state div {
+
+      font-size: 48px;
+
+      margin-bottom: 15px;
+
+    }
+
+
+    /* ==================================================
+       MAP
+       ================================================== */
+
+    .map-controls {
+
+      display: flex;
+
+      gap: 10px;
+
+      margin-bottom: 15px;
+
+    }
+
+
+    .map-controls input {
+
+      flex: 1;
+
+    }
+
+
+    #studentMap {
+
+      width: 100%;
+
+      height: 500px;
+
+      border-radius: 25px;
+
+      overflow: hidden;
+
+      border:
+        1px solid rgba(255,255,255,0.15);
+
+      box-shadow:
+        0 20px 50px
+        rgba(0,0,0,0.3);
+
+    }
+
+
+    #mapStatus {
+
+      margin-top: 15px;
+
+      padding: 16px;
+
+      border-radius: 16px;
+
+      background:
+        rgba(255,255,255,0.06);
+
+      color: #b9c1db;
+
+      line-height: 1.7;
+
+    }
+
+
+    /* ==================================================
+       STATS
+       ================================================== */
+
+    .stats-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(160px,1fr)
+        );
+
+      gap: 15px;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .stat-card {
+
+      padding: 22px;
+
+      border-radius: 22px;
+
+    }
+
+
+    .stat-number {
+
+      font-size: 32px;
+
+      font-weight: 800;
+
+      margin-bottom: 5px;
+
+    }
+
+
+    .stat-label {
+
+      color: #8f99b9;
+
+      font-size: 13px;
+
+    }
+
+
+    /* ==================================================
+       MOBILE
+       ================================================== */
+
+    @media(max-width:700px) {
+
+      .page {
+        padding: 15px;
+      }
+
+
+      .login-card {
+        padding: 25px 20px;
+      }
+
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+
+      .top-actions {
+        width: 100%;
+      }
+
+
+      .top-actions button {
+        flex: 1;
+      }
+
+
+      .hero h2 {
+        font-size: 25px;
+      }
+
+
+      .map-controls {
+        flex-direction: column;
+      }
+
+
+      #studentMap {
+        height: 420px;
+      }
+
+    }
+
+  </style>
+
 </head>
+
 
 <body>
 
-  <!-- ================= 3D WORLD ================= -->
 
-  <div class="scene">
+  <!-- ==================================================
+       STUDENT LOGIN
+       ================================================== -->
 
-    <div class="grid-floor"></div>
+  <section
+    id="loginPage"
+    class="page login-page active"
+  >
 
-    <div class="cube cube-one"></div>
-    <div class="cube cube-two"></div>
-    <div class="cube cube-three"></div>
+    <div class="login-card glass">
 
-    <div class="orb orb-one"></div>
-    <div class="orb orb-two"></div>
-
-  </div>
-
-
-  <!-- ================================================= -->
-  <!--                    STUDENT LOGIN                  -->
-  <!-- ================================================= -->
-
-  <section id="loginPage" class="page active">
-
-    <div class="login-box glass">
-
-      <div class="logo-3d">
-        HITAM
+      <div class="logo">
+        H
       </div>
 
-      <div class="badge">
-        STUDENT PORTAL
-      </div>
+      <h1>HITAM</h1>
 
-      <h1>Welcome</h1>
-
-      <p class="subtext">
-        Enter your HITAM account
+      <p class="subtitle">
+        Student Portal
       </p>
 
 
-      <input
-        id="username"
-        type="text"
-        placeholder="Username"
-        autocomplete="username"
-      >
+      <div class="input-group">
+
+        <label>
+          Username
+        </label>
+
+        <input
+          id="username"
+          type="text"
+          placeholder="Enter your username"
+          autocomplete="username"
+        >
+
+      </div>
 
 
-      <input
-        id="mobileNumber"
-        type="tel"
-        placeholder="Mobile number"
-      >
+      <div class="input-group">
+
+        <label>
+          Mobile Number
+        </label>
+
+        <input
+          id="mobileNumber"
+          type="tel"
+          placeholder="Enter registered mobile number"
+          autocomplete="tel"
+        >
+
+      </div>
 
 
-      <input
-        id="password"
-        type="password"
-        placeholder="Password"
-        autocomplete="current-password"
-      >
+      <div class="input-group">
 
+        <label>
+          Password
+        </label>
 
-      <button onclick="studentLogin()">
-        ENTER HITAM
-      </button>
+        <input
+          id="password"
+          type="password"
+          placeholder="Enter password"
+          autocomplete="current-password"
+        >
+
+      </div>
 
 
       <button
-        class="secondary-button"
-        onclick="showLeaderLogin()"
+        class="primary-button"
+        onclick="studentLogin()"
       >
-        👑 LEADERS PANEL
+        LOGIN
       </button>
+
+
+      <div
+        id="loginMessage"
+        class="message"
+      ></div>
+
+
+      <div class="login-links">
+
+        <button
+          class="text-button"
+          onclick="showLeaderLogin()"
+        >
+          👑 Leaders
+        </button>
+
+        <button
+          class="text-button"
+          onclick="showForgotPassword()"
+        >
+          Forgot password?
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================================================
+       LEADER LOGIN
+       ================================================== -->
+
+  <section
+    id="leaderLoginPage"
+    class="page login-page"
+  >
+
+    <div class="login-card glass">
+
+      <div class="logo">
+        👑
+      </div>
+
+      <h1>Leaders</h1>
+
+      <p class="subtitle">
+        HITAM Leaders Panel
+      </p>
+
+
+      <div class="input-group">
+
+        <label>
+          Leader Username
+        </label>
+
+        <input
+          id="leaderUsername"
+          type="text"
+          placeholder="Enter leader username"
+          autocomplete="username"
+        >
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>
+          Leader Password
+        </label>
+
+        <input
+          id="leaderPassword"
+          type="password"
+          placeholder="Enter leader password"
+          autocomplete="current-password"
+        >
+
+      </div>
+
+
+      <button
+        class="primary-button"
+        onclick="leaderLogin()"
+      >
+        LEADER LOGIN
+      </button>
+
+
+      <div
+        id="leaderMessage"
+        class="message"
+      ></div>
 
 
       <button
         class="text-button"
-        onclick="showForgotPassword()"
-      >
-        Forgot Password?
-      </button>
-
-
-      <p
-        id="loginMessage"
-        class="message"
-      ></p>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- ================================================= -->
-  <!--                   LEADER LOGIN                    -->
-  <!-- ================================================= -->
-
-  <section id="leaderLoginPage" class="page">
-
-    <div class="login-box glass leader-login">
-
-      <div class="leader-icon">
-        👑
-      </div>
-
-      <div class="badge">
-        AUTHORIZED ACCESS
-      </div>
-
-      <h1>Leaders Panel</h1>
-
-      <p class="subtext">
-        Restricted to authorized HITAM leaders
-      </p>
-
-
-      <input
-        id="leaderUsername"
-        type="text"
-        placeholder="Leader username"
-      >
-
-
-      <input
-        id="leaderPassword"
-        type="password"
-        placeholder="Leader password"
-      >
-
-
-      <button onclick="leaderLogin()">
-        🔐 LEADER LOGIN
-      </button>
-
-
-      <button
-        class="secondary-button"
         onclick="showStudentLogin()"
       >
-        BACK TO STUDENT LOGIN
+        ← Student Login
       </button>
-
-
-      <p
-        id="leaderMessage"
-        class="message"
-      ></p>
 
     </div>
 
   </section>
 
 
+  <!-- ==================================================
+       FORGOT PASSWORD
+       ================================================== -->
 
-  <!-- ================================================= -->
-  <!--                 FORGOT PASSWORD                   -->
-  <!-- ================================================= -->
+  <section
+    id="forgotPage"
+    class="page login-page"
+  >
 
-  <section id="forgotPage" class="page">
+    <div class="login-card glass">
 
-    <div class="login-box glass">
-
-      <div class="logo-small">
+      <div class="logo">
         🔐
       </div>
 
-      <div class="badge">
-        ACCOUNT SECURITY
-      </div>
+      <h1>Account Recovery</h1>
 
-      <h1>Reset Password</h1>
-
-      <p class="subtext">
+      <p class="subtitle">
         Verify your HITAM account
       </p>
 
 
-      <input
-        id="forgotUsername"
-        type="text"
-        placeholder="Username"
+      <div class="input-group">
+
+        <label>
+          Username
+        </label>
+
+        <input
+          id="forgotUsername"
+          type="text"
+          placeholder="Enter username"
+        >
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>
+          Registered Mobile Number
+        </label>
+
+        <input
+          id="forgotMobile"
+          type="tel"
+          placeholder="Enter mobile number"
+        >
+
+      </div>
+
+
+      <button
+        class="primary-button"
+        onclick="requestPasswordReset()"
       >
-
-
-      <input
-        id="forgotMobile"
-        type="tel"
-        placeholder="Registered mobile number"
-      >
-
-
-      <button onclick="requestPasswordReset()">
         VERIFY ACCOUNT
       </button>
 
 
-      <button
-        class="secondary-button"
-        onclick="showStudentLogin()"
-      >
-        BACK TO LOGIN
-      </button>
-
-
-      <p
+      <div
         id="forgotMessage"
         class="message"
-      ></p>
+      ></div>
+
+
+      <button
+        class="text-button"
+        onclick="showStudentLogin()"
+      >
+        ← Back to Login
+      </button>
 
     </div>
 
   </section>
 
 
-
-  <!-- ================================================= -->
-  <!--                 STUDENT DASHBOARD                 -->
-  <!-- ================================================= -->
+  <!-- ==================================================
+       STUDENT DASHBOARD
+       ================================================== -->
 
   <section
     id="studentDashboard"
-    class="dashboard page"
+    class="page"
   >
 
-    <!-- 3D NAVIGATION -->
-
-    <header class="topbar glass">
-
-      <div class="brand">
-
-        <strong>HITAM</strong>
-
-        <span>
-          Student Portal
-        </span>
-
-      </div>
+    <div class="dashboard">
 
 
-      <div class="online-status">
+      <header class="topbar glass">
 
-        <span class="status-dot"></span>
+        <div class="brand">
 
-        ONLINE
+          <div class="brand-logo">
+            H
+          </div>
 
-      </div>
+          <div>
+
+            <div class="brand-title">
+              HITAM
+            </div>
+
+            <div class="brand-subtitle">
+              Student Portal
+            </div>
+
+          </div>
+
+        </div>
 
 
-      <button
-        class="logout-button"
-        onclick="logout()"
-      >
-        Logout
-      </button>
+        <div class="top-actions">
 
-    </header>
+          <button
+            class="secondary-button"
+            onclick="openSettings()"
+          >
+            ⚙️ Settings
+          </button>
+
+          <button
+            class="secondary-button"
+            onclick="logout()"
+          >
+            Logout
+          </button>
+
+        </div>
+
+      </header>
 
 
+      <div class="hero glass">
 
-    <main>
-
-      <!-- 3D HERO -->
-
-      <div class="hero-card glass">
-
-        <div class="hero-content">
-
-          <span class="small-label">
-            HITAM STUDENT SPACE
+        <h2>
+          Welcome,
+          <span id="studentName">
+            Student
           </span>
+          👋
+        </h2>
 
-
-          <h1>
-            Welcome,
-            <span id="studentName">
-              Student
-            </span>
-          </h1>
-
-
-          <p>
-            Your college workspace in one place.
-          </p>
-
-        </div>
-
-
-        <div class="floating-logo">
-          HITAM
-        </div>
+        <p>
+          Your HITAM college dashboard.
+          Manage your assignments, files,
+          timetable, chat and other class
+          resources from one place.
+        </p>
 
       </div>
 
 
+      <div class="feature-grid">
 
-      <!-- DASHBOARD CARDS -->
-
-      <div class="dashboard-grid">
-
-
-        <!-- ASSIGNMENTS -->
 
         <div
           class="feature-card glass"
           onclick="openAssignments()"
         >
 
-          <div class="card-3d-icon">
+          <div class="feature-icon">
             📚
           </div>
 
-          <span class="card-number">
-            01
-          </span>
-
-          <h2>
+          <h3>
             Assignments
-          </h2>
+          </h3>
 
           <p>
-            Add, view and manage your assignments.
+            View and manage your class
+            assignments.
           </p>
-
-          <span class="open-card">
-            OPEN →
-          </span>
 
         </div>
 
-
-
-        <!-- FILES -->
 
         <div
           class="feature-card glass"
           onclick="openFiles()"
         >
 
-          <div class="card-3d-icon">
+          <div class="feature-icon">
             📁
           </div>
 
-          <span class="card-number">
-            02
-          </span>
-
-          <h2>
+          <h3>
             Files
-          </h2>
+          </h3>
 
           <p>
-            Upload and manage your college files.
+            Access class documents and
+            uploaded files.
           </p>
-
-          <span class="open-card">
-            OPEN →
-          </span>
 
         </div>
 
-
-
-        <!-- CHAT -->
 
         <div
           class="feature-card glass"
           onclick="openChat()"
         >
 
-          <div class="card-3d-icon">
+          <div class="feature-icon">
             💬
           </div>
 
-          <span class="card-number">
-            03
-          </span>
-
-          <h2>
+          <h3>
             Class Chat
-          </h2>
+          </h3>
 
           <p>
-            Chat with your class members.
+            Communicate with your classmates.
           </p>
-
-          <span class="open-card">
-            OPEN →
-          </span>
 
         </div>
 
-
-
-        <!-- TIMETABLE -->
 
         <div
           class="feature-card glass"
           onclick="openTimetable()"
         >
 
-          <div class="card-3d-icon">
+          <div class="feature-icon">
             🗓️
           </div>
 
-          <span class="card-number">
-            04
-          </span>
-
-          <h2>
+          <h3>
             Timetable
-          </h2>
+          </h3>
 
           <p>
-            View daily and monthly timetables.
+            View daily and monthly timetable.
           </p>
-
-          <span class="open-card">
-            OPEN →
-          </span>
 
         </div>
 
-
-
-        <!-- CHARTS -->
 
         <div
           class="feature-card glass"
           onclick="openCharts()"
         >
 
-          <div class="card-3d-icon">
+          <div class="feature-icon">
             📊
           </div>
 
-          <span class="card-number">
-            05
-          </span>
-
-          <h2>
+          <h3>
             Charts
-          </h2>
+          </h3>
 
           <p>
-            View your academic dashboard.
+            View class information and charts.
           </p>
-
-          <span class="open-card">
-            OPEN →
-          </span>
 
         </div>
 
-
-
-        <!-- SETTINGS -->
 
         <div
           class="feature-card glass"
           onclick="openSettings()"
         >
 
-          <div class="card-3d-icon">
+          <div class="feature-icon">
             ⚙️
           </div>
 
-          <span class="card-number">
-            06
-          </span>
-
-          <h2>
+          <h3>
             Settings
-          </h2>
+          </h3>
 
           <p>
-            Manage your account and password.
+            Manage your account settings.
           </p>
-
-          <span class="open-card">
-            OPEN →
-          </span>
 
         </div>
 
 
       </div>
 
-    </main>
+    </div>
 
   </section>
 
 
-
-  <!-- ================================================= -->
-  <!--                  ASSIGNMENTS                      -->
-  <!-- ================================================= -->
+  <!-- ==================================================
+       ASSIGNMENTS
+       ================================================== -->
 
   <section
     id="assignmentsPage"
-    class="dashboard page"
+    class="page"
   >
 
-    <header class="topbar glass">
+    <div class="content-card glass">
 
-      <div class="brand">
-        <strong>HITAM</strong>
-        <span>Assignments</span>
-      </div>
+      <div class="section-title">
 
-      <button
-        class="logout-button"
-        onclick="backToDashboard()"
-      >
-        ← Dashboard
-      </button>
+        <h2>
+          📚 Assignments
+        </h2>
 
-    </header>
-
-
-    <main>
-
-      <div class="section-header glass">
-
-        <span class="small-label">
-          STUDENT WORKSPACE
-        </span>
-
-        <h1>
-          Assignments
-        </h1>
-
-        <p>
-          Add and manage your assignments.
-        </p>
+        <button
+          class="secondary-button"
+          onclick="backToDashboard()"
+        >
+          ← Back
+        </button>
 
       </div>
 
 
-      <div class="workspace-grid">
+      <div class="input-group">
 
-        <div class="action-card glass">
-
-          <div class="card-3d-icon">
-            ➕
-          </div>
-
-          <h2>
-            Add Assignment
-          </h2>
-
-          <input
-            id="assignmentTitle"
-            type="text"
-            placeholder="Assignment title"
-          >
-
-          <textarea
-            id="assignmentDetails"
-            placeholder="Assignment details"
-          ></textarea>
-
-          <button onclick="addAssignment()">
-            ADD ASSIGNMENT
-          </button>
-
-        </div>
-
-
-        <div
-          id="assignmentList"
-          class="action-card glass"
+        <input
+          id="assignmentTitle"
+          type="text"
+          placeholder="Assignment title"
         >
 
-          <div class="empty-state">
+      </div>
 
-            <div>
-              📚
-            </div>
 
-            <h2>
-              No assignments
-            </h2>
+      <div class="input-group">
 
-            <p>
-              Add an assignment to see it here.
-            </p>
-
-          </div>
-
-        </div>
+        <textarea
+          id="assignmentDetails"
+          rows="4"
+          placeholder="Assignment details"
+        ></textarea>
 
       </div>
 
-    </main>
+
+      <button
+        onclick="addAssignment()"
+      >
+        + ADD ASSIGNMENT
+      </button>
+
+
+      <div
+        id="assignmentList"
+        style="margin-top:25px;"
+      ></div>
+
+    </div>
 
   </section>
 
 
-
-  <!-- ================================================= -->
-  <!--                      FILES                        -->
-  <!-- ================================================= -->
+  <!-- ==================================================
+       FILES
+       ================================================== -->
 
   <section
     id="filesPage"
-    class="dashboard page"
+    class="page"
   >
 
-    <header class="topbar glass">
+    <div class="content-card glass">
 
-      <div class="brand">
-        <strong>HITAM</strong>
-        <span>Files</span>
-      </div>
-
-      <button
-        class="logout-button"
-        onclick="backToDashboard()"
-      >
-        ← Dashboard
-      </button>
-
-    </header>
-
-
-    <main>
-
-      <div class="section-header glass">
-
-        <span class="small-label">
-          FILE CENTER
-        </span>
-
-        <h1>
-          My Files
-        </h1>
-
-        <p>
-          Upload and manage your college files.
-        </p>
-
-      </div>
-
-
-      <div class="upload-zone glass">
-
-        <div class="upload-icon">
-          📁
-        </div>
+      <div class="section-title">
 
         <h2>
-          Upload Files
+          📁 Files
         </h2>
-
-        <p>
-          Choose documents, images or other files.
-        </p>
-
-
-        <input
-          id="fileUpload"
-          type="file"
-          multiple
-        >
-
-
-        <button onclick="uploadFiles()">
-          UPLOAD FILES
-        </button>
-
 
         <button
           class="secondary-button"
-          onclick="addGoogleDriveFile()"
+          onclick="backToDashboard()"
         >
-          ☁️ ADD FROM GOOGLE DRIVE
+          ← Back
         </button>
-
-
-        <div id="fileList"></div>
 
       </div>
 
-    </main>
+
+      <input
+        id="fileUpload"
+        type="file"
+        multiple
+      >
+
+
+      <br><br>
+
+
+      <button
+        onclick="uploadFiles()"
+      >
+        UPLOAD FILE
+      </button>
+
+
+      <button
+        class="secondary-button"
+        onclick="addGoogleDriveFile()"
+      >
+        Google Drive
+      </button>
+
+
+      <div
+        id="fileList"
+        style="margin-top:20px;"
+      ></div>
+
+
+    </div>
 
   </section>
 
 
-
-  <!-- ================================================= -->
-  <!--                       CHAT                         -->
-  <!-- ================================================= -->
+  <!-- ==================================================
+       CHAT
+       ================================================== -->
 
   <section
     id="chatPage"
-    class="dashboard page"
+    class="page"
   >
 
-    <header class="topbar glass">
+    <div class="content-card glass">
 
-      <div class="brand">
-        <strong>HITAM</strong>
-        <span>Class Chat</span>
+      <div class="section-title">
+
+        <h2>
+          💬 Class Chat
+        </h2>
+
+        <button
+          class="secondary-button"
+          onclick="backToDashboard()"
+        >
+          ← Back
+        </button>
+
       </div>
 
-      <button
-        class="logout-button"
-        onclick="backToDashboard()"
+
+      <div
+        id="chatMessages"
+        style="
+          min-height:300px;
+          padding:15px;
+          overflow:auto;
+          margin-bottom:15px;
+        "
+      ></div>
+
+
+      <div
+        style="
+          display:flex;
+          gap:10px;
+        "
       >
-        ← Dashboard
-      </button>
 
-    </header>
-
-
-    <main>
-
-      <div class="chat-container glass">
-
-        <div class="chat-header">
-
-          <div>
-
-            <span class="small-label">
-              CLASS COMMUNICATION
-            </span>
-
-            <h1>
-              Chat
-            </h1>
-
-          </div>
-
-          <span class="status-dot"></span>
-
-        </div>
-
-
-        <div
-          id="chatMessages"
-          class="chat-messages"
+        <input
+          id="chatInput"
+          type="text"
+          placeholder="Type a message..."
         >
 
-          <!-- Empty intentionally -->
-
-        </div>
-
-
-        <div class="chat-input-area">
-
-          <input
-            id="chatInput"
-            type="text"
-            placeholder="Type a message..."
-          >
-
-          <button onclick="sendMessage()">
-            SEND
-          </button>
-
-        </div>
+        <button
+          onclick="sendMessage()"
+        >
+          SEND
+        </button>
 
       </div>
 
-    </main>
+    </div>
 
   </section>
 
 
-
-  <!-- ================================================= -->
-  <!--                    TIMETABLE                      -->
-  <!-- ================================================= -->
+  <!-- ==================================================
+       TIMETABLE
+       ================================================== -->
 
   <section
     id="timetablePage"
-    class="dashboard page"
+    class="page"
   >
 
-    <header class="topbar glass">
+    <div class="content-card glass">
 
-      <div class="brand">
-        <strong>HITAM</strong>
-        <span>Timetable</span>
-      </div>
+      <div class="section-title">
 
-      <button
-        class="logout-button"
-        onclick="backToDashboard()"
-      >
-        ← Dashboard
-      </button>
-
-    </header>
-
-
-    <main>
-
-      <div class="section-header glass">
-
-        <span class="small-label">
-          ACADEMIC SCHEDULE
-        </span>
-
-        <h1>
-          Timetable
-        </h1>
-
-        <p>
-          View your daily and monthly timetable.
-        </p>
-
-      </div>
-
-
-      <div class="timetable-actions glass">
-
-        <button onclick="showDailyTimetable()">
-          DAILY
-        </button>
+        <h2>
+          🗓️ Timetable
+        </h2>
 
         <button
           class="secondary-button"
-          onclick="showMonthlyTimetable()"
+          onclick="backToDashboard()"
         >
-          MONTHLY
+          ← Back
         </button>
 
+      </div>
+
+
+      <div
+        style="
+          display:flex;
+          gap:10px;
+          flex-wrap:wrap;
+          margin-bottom:20px;
+        "
+      >
+
+        <button
+          onclick="showDailyTimetable()"
+        >
+          Daily
+        </button>
+
+        <button
+          onclick="showMonthlyTimetable()"
+        >
+          Monthly
+        </button>
 
         <input
           id="timetableUpload"
           type="file"
-          accept=".pdf,.jpg,.jpeg,.png"
+          accept="image/*,.pdf"
         >
 
-
-        <button onclick="uploadTimetable()">
-          UPLOAD TIMETABLE
+        <button
+          onclick="uploadTimetable()"
+        >
+          Upload Timetable
         </button>
 
       </div>
@@ -857,189 +1648,183 @@
 
       <div
         id="timetableDisplay"
-        class="timetable-display glass"
+        class="empty-state"
       >
 
-        <div class="empty-state">
+        <div>
+          🗓️
+        </div>
 
-          <div>
-            🗓️
+        <h2>
+          Select timetable view
+        </h2>
+
+        <p>
+          Choose Daily or Monthly.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================================================
+       CHARTS
+       ================================================== -->
+
+  <section
+    id="chartsPage"
+    class="page"
+  >
+
+    <div class="content-card glass">
+
+      <div class="section-title">
+
+        <h2>
+          📊 Charts
+        </h2>
+
+        <button
+          class="secondary-button"
+          onclick="backToDashboard()"
+        >
+          ← Back
+        </button>
+
+      </div>
+
+
+      <div class="stats-grid">
+
+        <div class="stat-card glass">
+
+          <div class="stat-number">
+            —
           </div>
 
-          <h2>
-            No timetable uploaded
-          </h2>
+          <div class="stat-label">
+            Class Records
+          </div>
 
-          <p>
-            Your timetable will appear here.
-          </p>
+        </div>
+
+
+        <div class="stat-card glass">
+
+          <div class="stat-number">
+            —
+          </div>
+
+          <div class="stat-label">
+            Assignments
+          </div>
+
+        </div>
+
+
+        <div class="stat-card glass">
+
+          <div class="stat-number">
+            —
+          </div>
+
+          <div class="stat-label">
+            Attendance
+          </div>
 
         </div>
 
       </div>
 
-    </main>
+
+      <div class="empty-state">
+
+        <div>
+          📈
+        </div>
+
+        <h2>
+          Charts
+        </h2>
+
+        <p>
+          Your college/class charts can be
+          connected here later.
+        </p>
+
+      </div>
+
+    </div>
 
   </section>
 
 
-
-  <!-- ================================================= -->
-  <!--                      CHARTS                       -->
-  <!-- ================================================= -->
+  <!-- ==================================================
+       SETTINGS
+       ================================================== -->
 
   <section
-    id="chartsPage"
-    class="dashboard page"
+    id="settingsPage"
+    class="page"
   >
 
-    <header class="topbar glass">
+    <div class="content-card glass">
 
-      <div class="brand">
-        <strong>HITAM</strong>
-        <span>Charts</span>
+      <div class="section-title">
+
+        <h2>
+          ⚙️ Settings
+        </h2>
+
+        <button
+          class="secondary-button"
+          onclick="backToDashboard()"
+        >
+          ← Back
+        </button>
+
       </div>
 
-      <button
-        class="logout-button"
-        onclick="backToDashboard()"
+
+      <div
+        class="glass"
+        style="
+          padding:20px;
+          border-radius:20px;
+          margin-bottom:20px;
+        "
       >
-        ← Dashboard
-      </button>
 
-    </header>
+        <h3>
+          Account
+        </h3>
 
+        <p style="margin-top:10px;">
+          Username:
+          <strong id="settingsUsername">
+            —
+          </strong>
+        </p>
 
-    <main>
-
-      <div class="section-header glass">
-
-        <span class="small-label">
-          STUDENT ANALYTICS
-        </span>
-
-        <h1>
-          Dashboard Charts
-        </h1>
-
-        <p>
-          Your personal academic information.
+        <p style="margin-top:8px;">
+          Mobile:
+          <strong id="settingsMobile">
+            —
+          </strong>
         </p>
 
       </div>
 
 
-      <div class="charts-grid">
-
-        <div class="chart-card glass">
-
-          <h2>
-            Attendance
-          </h2>
-
-          <div class="chart-3d">
-            <div class="chart-bar bar-one"></div>
-            <div class="chart-bar bar-two"></div>
-            <div class="chart-bar bar-three"></div>
-            <div class="chart-bar bar-four"></div>
-            <div class="chart-bar bar-five"></div>
-          </div>
-
-          <p>
-            Personal attendance data
-          </p>
-
-        </div>
+      <h3 style="margin-bottom:15px;">
+        Change Password
+      </h3>
 
 
-        <div class="chart-card glass">
-
-          <h2>
-            Academic Progress
-          </h2>
-
-          <div class="progress-3d">
-
-            <div class="progress-fill"></div>
-
-          </div>
-
-          <p>
-            Personal progress
-          </p>
-
-        </div>
-
-      </div>
-
-    </main>
-
-  </section>
-
-
-
-  <!-- ================================================= -->
-  <!--                    SETTINGS                       -->
-  <!-- ================================================= -->
-
-  <section
-    id="settingsPage"
-    class="dashboard page"
-  >
-
-    <header class="topbar glass">
-
-      <div class="brand">
-        <strong>HITAM</strong>
-        <span>Settings</span>
-      </div>
-
-      <button
-        class="logout-button"
-        onclick="backToDashboard()"
-      >
-        ← Dashboard
-      </button>
-
-    </header>
-
-
-    <main>
-
-      <div class="settings-card glass">
-
-        <span class="small-label">
-          ACCOUNT SECURITY
-        </span>
-
-        <h1>
-          Settings
-        </h1>
-
-
-        <div class="account-info">
-
-          <p>
-            Username:
-            <strong id="settingsUsername">
-              -
-            </strong>
-          </p>
-
-          <p>
-            Mobile:
-            <strong id="settingsMobile">
-              -
-            </strong>
-          </p>
-
-        </div>
-
-
-        <h2>
-          Change Password
-        </h2>
-
+      <div class="input-group">
 
         <input
           id="oldPassword"
@@ -1047,6 +1832,10 @@
           placeholder="Current password"
         >
 
+      </div>
+
+
+      <div class="input-group">
 
         <input
           id="newPassword"
@@ -1054,6 +1843,10 @@
           placeholder="New password"
         >
 
+      </div>
+
+
+      <div class="input-group">
 
         <input
           id="confirmPassword"
@@ -1061,222 +1854,220 @@
           placeholder="Confirm new password"
         >
 
-
-        <button onclick="changePassword()">
-          CHANGE PASSWORD
-        </button>
-
-
-        <p
-          id="settingsMessage"
-          class="message"
-        ></p>
-
-      </div>
-
-    </main>
-
-  </section>
-
-
-
-  <!-- ================================================= -->
-  <!--                  LEADERS PANEL                    -->
-  <!-- ================================================= -->
-
-  <section
-    id="leadersDashboard"
-    class="dashboard page"
-  >
-
-    <header class="topbar glass">
-
-      <div class="brand">
-
-        <strong>
-          HITAM
-        </strong>
-
-        <span>
-          Leaders Panel
-        </span>
-
-      </div>
-
-
-      <div class="leader-badge">
-        👑 LEADER
       </div>
 
 
       <button
-        class="logout-button"
-        onclick="logout()"
+        onclick="changePassword()"
       >
-        Logout
+        CHANGE PASSWORD
       </button>
 
-    </header>
+
+      <div
+        id="settingsMessage"
+        class="message"
+      ></div>
+
+    </div>
+
+  </section>
 
 
-    <main>
+  <!-- ==================================================
+       LEADERS DASHBOARD
+       ================================================== -->
+
+  <section
+    id="leadersDashboard"
+    class="page"
+  >
+
+    <div class="dashboard">
 
 
-      <div class="hero-card glass">
+      <header class="topbar glass">
 
-        <div class="hero-content">
+        <div class="brand">
 
-          <span class="small-label">
-            AUTHORIZED LEADER ACCESS
-          </span>
+          <div class="brand-logo">
+            👑
+          </div>
 
+          <div>
 
-          <h1>
-            Location Center
-          </h1>
+            <div class="brand-title">
+              HITAM Leaders
+            </div>
 
+            <div class="brand-subtitle">
+              Authorized Leaders Panel
+            </div>
 
-          <p>
-            Monitor students who have granted
-            location access.
-          </p>
-
-        </div>
-
-
-        <div class="leader-icon big">
-          👑
-        </div>
-
-      </div>
-
-
-
-      <!-- LEADER STATISTICS -->
-
-      <div class="leader-stats">
-
-        <div class="stat-card glass">
-
-          <span>
-            STUDENTS
-          </span>
-
-          <strong id="studentCount">
-            0
-          </strong>
+          </div>
 
         </div>
 
 
-        <div class="stat-card glass">
+        <div class="top-actions">
 
-          <span>
-            LOCATION ACTIVE
-          </span>
+          <button
+            class="secondary-button"
+            onclick="loadAllStudentLocations()"
+          >
+            🔄 Refresh
+          </button>
 
-          <strong id="activeLocationCount">
-            0
-          </strong>
-
-        </div>
-
-
-        <div class="stat-card glass">
-
-          <span>
-            LEADERS
-          </span>
-
-          <strong>
-            5
-          </strong>
+          <button
+            class="secondary-button"
+            onclick="logout()"
+          >
+            Logout
+          </button>
 
         </div>
 
-      </div>
+      </header>
 
 
-
-      <!-- LOCATION SEARCH -->
-
-      <div class="tracker-card glass">
-
-        <span class="small-label">
-          STUDENT LOCATION
-        </span>
+      <div class="hero glass">
 
         <h2>
-          Find Student
+          Leaders Control Center 👑
         </h2>
 
-
-        <p class="subtext">
-          Search using the registered mobile number.
+        <p>
+          Authorized leaders can monitor
+          students who are actively sharing
+          their location.
         </p>
 
+      </div>
 
-        <div class="search-area">
+
+      <!-- STATS -->
+
+      <div class="stats-grid">
+
+        <div class="stat-card glass">
+
+          <div
+            id="leaderStudentCount"
+            class="stat-number"
+          >
+            —
+          </div>
+
+          <div class="stat-label">
+            Students
+          </div>
+
+        </div>
+
+
+        <div class="stat-card glass">
+
+          <div
+            id="leaderLocationCount"
+            class="stat-number"
+          >
+            —
+          </div>
+
+          <div class="stat-label">
+            Active Locations
+          </div>
+
+        </div>
+
+
+        <div class="stat-card glass">
+
+          <div
+            class="stat-number"
+          >
+            5
+          </div>
+
+          <div class="stat-label">
+            Authorized Leaders
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- LOCATION MAP -->
+
+      <div class="content-card glass">
+
+        <div class="section-title">
+
+          <h2>
+            📍 Student Locations
+          </h2>
+
+        </div>
+
+
+        <div class="map-controls">
 
           <input
             id="searchMobile"
             type="tel"
-            placeholder="Student mobile number"
+            placeholder="Enter student's registered mobile number"
           >
 
 
-          <button onclick="findStudent()">
-            📍 TRACK STUDENT
+          <button
+            onclick="findStudent()"
+          >
+            TRACK STUDENT
           </button>
 
         </div>
 
 
-        <div
-          id="trackingResult"
-          class="tracking-result"
-        >
-
-          No student selected.
-
-        </div>
+        <div id="studentMap"></div>
 
 
-        <!-- REAL MAP WILL BE CONNECTED HERE -->
+        <div id="mapStatus">
 
-        <div class="map-placeholder">
-
-          <div class="map-grid-3d"></div>
-
-          <div class="map-icon">
-            🗺️
-          </div>
-
-          <h3>
-            HITAM Student Map
-          </h3>
-
-          <p>
-            The secure real map will display
-            students who have enabled location
-            sharing.
-          </p>
+          Enter a student's registered
+          mobile number and tap
+          <strong>
+            TRACK STUDENT
+          </strong>.
 
         </div>
 
       </div>
 
-    </main>
+
+    </div>
 
   </section>
 
 
+  <!-- ==================================================
+       LEAFLET
+       ================================================== -->
 
-  <!-- ================================================= -->
-  <!--                  JAVASCRIPT                       -->
-  <!-- ================================================= -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  ></script>
 
-  <script src="app.js"></script>
+
+  <!-- ==================================================
+       HITAM APP
+       ================================================== -->
+
+  <script
+    src="app.js"
+  ></script>
+
 
 </body>
+
 </html>
