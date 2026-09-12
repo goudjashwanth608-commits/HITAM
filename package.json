@@ -1,12 +1,13 @@
 {
   "name": "hitam",
-  "version": "1.0.0",
-  "description": "HITAM 3D Student Portal",
+  "version": "2.0.0",
+  "description": "HITAM 3D Student and Leaders Portal",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "express-session": "^1.18.2"
   }
 }
