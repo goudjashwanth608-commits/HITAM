@@ -237,16 +237,17 @@ app.post("/api/student/login", (req, res) => {
 
 });
 
-
 // ======================================================
 // LEADER LOGIN
 // ======================================================
+
 app.post("/api/leader/login", (req, res) => {
+
     const { username, password } = req.body;
 
     const leaders = [
         {
-            username: "leader1",
+            username: "BATHINI JASHWANTH",
             password: "leader123"
         },
         {
@@ -269,7 +270,8 @@ app.post("/api/leader/login", (req, res) => {
 
     const leader = leaders.find(
         user =>
-            user.username === username &&
+            user.username.trim().toLowerCase() ===
+            username.trim().toLowerCase() &&
             user.password === password
     );
 
@@ -286,7 +288,6 @@ app.post("/api/leader/login", (req, res) => {
         username: leader.username
     });
 });
-
 // ======================================================
 // CURRENT LOGIN
 // ======================================================
