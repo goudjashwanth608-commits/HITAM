@@ -141,88 +141,70 @@ async function studentLogin() {
 // ======================================================
 // LEADER LOGIN
 // ======================================================
-
 async function leaderLogin() {
+    const username =
+        document.getElementById("leaderUsername")?.value.trim();
 
-  const username =
-    document.getElementById("leaderUsername")?.value.trim();
+    const password =
+        document.getElementById("leaderPassword")?.value || "";
 
-  const password =
-    document.getElementById("leaderPassword")?.value;
+    const message =
+        document.getElementById("leaderMessage");
 
-  const message =
-    document.getElementById("leaderMessage");
-
-
-  if (!username || !password) {
-
-    if (message) {
-      message.textContent =
-        "Enter leader username and password.";
+    if (!username || !password) {
+        if (message) {
+            message.textContent =
+                "Enter leader username and password.";
+        }
+        return;
     }
 
-    return;
-  }
+    try {
+        const response = await fetch("/api/leader/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        });
 
+        const result = await response.json();
 
-  try {
+        if (!response.ok || !result.success) {
+            if (message) {
+                message.textContent =
+                    result.message || "Invalid leader credentials.";
+            }
+            return;
+        }
 
-    const response =
-      await fetch("/api/leader/login", {
+        // Save the logged-in leader
+        currentUser = result;
 
-        method: "POST",
+        if (message) {
+            message.textContent = "";
+        }
 
-        headers: {
-          "Content-Type": "application/json"
-        },
+        // Open Leaders Panel
+        showPage("leadersDashboard");
 
-        body: JSON.stringify({
-          username,
-          password
-        })
+        // Load the leader dashboard
+        setTimeout(() => {
+            initializeStudentMap();
+            loadAllStudentLocations();
+        }, 300);
 
-      });
+    } catch (error) {
+        console.error("Leader login error:", error);
 
-
-    const result =
-      await response.json();
-
-
-    if (!response.ok || !result.success) {
-
-      if (message) {
-        message.textContent =
-          result.message || "Leader login failed.";
-      }
-
-      return;
+        if (message) {
+            message.textContent =
+                "Unable to connect to HITAM server.";
+        }
     }
-
-
-    currentUser = result;
-
-
-    showPage("leadersDashboard");
-
-
-    // Prepare leader map
-    setTimeout(() => {
-      initializeStudentMap();
-      loadAllStudentLocations();
-    }, 400);
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    if (message) {
-      message.textContent =
-        "Unable to connect to HITAM server.";
-    }
-
-  }
-
 }
 
 
