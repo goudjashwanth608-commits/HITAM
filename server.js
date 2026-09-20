@@ -241,54 +241,51 @@ app.post("/api/student/login", (req, res) => {
 // ======================================================
 // LEADER LOGIN
 // ======================================================
-
 app.post("/api/leader/login", (req, res) => {
+    const { username, password } = req.body;
 
-  const {
-    username,
-    password
-  } = req.body;
+    const leaders = [
+        {
+            username: "leader1",
+            password: "leader123"
+        },
+        {
+            username: "leader2",
+            password: "leader123"
+        },
+        {
+            username: "leader3",
+            password: "leader123"
+        },
+        {
+            username: "leader4",
+            password: "leader123"
+        },
+        {
+            username: "leader5",
+            password: "leader123"
+        }
+    ];
 
-
-  const leader =
-    LEADERS.find(
-      item =>
-        item.username === username &&
-        item.password === password
+    const leader = leaders.find(
+        user =>
+            user.username === username &&
+            user.password === password
     );
 
+    if (!leader) {
+        return res.status(401).json({
+            success: false,
+            message: "Invalid leader credentials."
+        });
+    }
 
-  if (!leader) {
-
-    return res.status(401).json({
-      success: false,
-      message: "Invalid leader credentials."
+    res.json({
+        success: true,
+        role: "leader",
+        username: leader.username
     });
-
-  }
-
-
-  req.session.user = {
-
-    role: "leader",
-
-    username: leader.username
-
-  };
-
-
-  res.json({
-
-    success: true,
-
-    role: "leader",
-
-    username: leader.username
-
-  });
-
 });
-
 
 // ======================================================
 // CURRENT LOGIN
