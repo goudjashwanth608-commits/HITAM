@@ -141,20 +141,18 @@ async function studentLogin() {
 // ======================================================
 // LEADER LOGIN
 // ======================================================
+
 async function leaderLogin() {
-    const username =
-        document.getElementById("leaderUsername")?.value.trim();
+    const usernameInput = document.getElementById("leaderUsername");
+    const passwordInput = document.getElementById("leaderPassword");
+    const message = document.getElementById("leaderMessage");
 
-    const password =
-        document.getElementById("leaderPassword")?.value || "";
-
-    const message =
-        document.getElementById("leaderMessage");
+    const username = usernameInput?.value.trim();
+    const password = passwordInput?.value || "";
 
     if (!username || !password) {
         if (message) {
-            message.textContent =
-                "Enter leader username and password.";
+            message.textContent = "Enter leader username and password.";
         }
         return;
     }
@@ -182,16 +180,19 @@ async function leaderLogin() {
         }
 
         // Save the logged-in leader
-        currentUser = result;
+        currentUser = {
+            ...result,
+            role: "leader"
+        };
 
         if (message) {
             message.textContent = "";
         }
 
-        // Open Leaders Panel
+        // Open Leaders Dashboard
         showPage("leadersDashboard");
 
-        // Load the leader dashboard
+        // Start/load the leader map
         setTimeout(() => {
             initializeStudentMap();
             loadAllStudentLocations();
@@ -206,66 +207,6 @@ async function leaderLogin() {
         }
     }
 }
-
-
-// ======================================================
-// CHECK CURRENT LOGIN
-// ======================================================
-
-async function checkLogin() {
-
-  try {
-
-    const response =
-      await fetch("/api/me");
-
-
-    if (!response.ok) {
-      return;
-    }
-
-
-    const result =
-      await response.json();
-
-
-    if (!result.success) {
-      return;
-    }
-
-
-    currentUser =
-      result.user;
-
-
-    if (currentUser.role === "leader") {
-
-      showPage("leadersDashboard");
-
-      setTimeout(() => {
-        initializeStudentMap();
-        loadAllStudentLocations();
-      }, 300);
-
-    } else {
-
-      updateStudentInformation();
-
-      showPage("studentDashboard");
-
-    }
-
-
-  } catch (error) {
-
-    console.log(
-      "No active login session."
-    );
-
-  }
-
-}
-
 
 // ======================================================
 // STUDENT INFORMATION
